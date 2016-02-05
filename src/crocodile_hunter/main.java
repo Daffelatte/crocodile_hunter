@@ -2,7 +2,9 @@ package crocodile_hunter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
+import crocodile_hunter.Unit;
 import crocodile_hunter.Player;
+import crocodile_hunter.Crocodile;
 import crocodile_hunter.Map;
 
 public class main{
@@ -21,10 +23,7 @@ public class main{
 			"You stand still, as you cannot go further south.",
 			"You stand still, as you cannot go further west."}
 	};
-	static int[][] positionDelta={
-			{-1,0,1,0},
-			{0,1,0,-1},
-	};
+	
 
 	static int[] intCommandList=   {110,101,115,119,109,104,100};
 
@@ -38,7 +37,9 @@ public class main{
 		String strMessage=null;
 		Scanner scanIn = new Scanner(System.in);
 		
-		
+		//create Unit instances
+		Player player = new Player(0,9,1);
+		Crocodile crocodile = new Crocodile(8,3,2);
 		
 		
 		System.out.println(strCommands);
@@ -47,20 +48,23 @@ public class main{
 
 			System.out.println("Enter command: ");
 
-			// identify command
+			// identify player command
 			intCommand=System.in.read();
 
 			// execute command
-			strMessage=Player.executeCommand(intCommand);
+			strMessage=player.executeCommand(intCommand, player, player);
 			
+			// Choose crocodile command
+			intCommand=crocodile.chooseCommand();
 			
-			
+			// execute command
+			strMessage=crocodile.executeCommand(intCommand, crocodile, player);			
 			
 			
 			//This is necessary, but I don't know why
 			scanIn.nextLine();
 			
-			intHeight=Map.intMap[Player.positionY][Player.positionX];
+			intHeight=Map.intMap[player.positionY][player.positionX];
 			strMessage+=("\nYou are now standing "+intHeight+" meters above sea level.");
 			
 			System.out.println(strMessage);
