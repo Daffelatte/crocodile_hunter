@@ -3,13 +3,13 @@ import crocodile_hunter.main;
 
 
 public class Unit {
-	public static int positionX = 0;
-	public static int positionY = 0;
-	public static int deltaX = 0;
-	public static int deltaY = 0;
-	public static int[][] positionDelta={
-			{-0,0,0,0},
-			{0,0,0,-0},
+	public int positionX = 0;
+	public int positionY = 9;
+	public int deltaX = 0;
+	public int deltaY = 0;
+	public int[][] positionDelta={
+			{-1,0,1,0},
+			{0,1,0,-1},
 	};
 	public boolean[][] unitMap = {
 			{false,false,false,false,false,false,false,false,false,false},
@@ -23,28 +23,38 @@ public class Unit {
 			{false,false,false,false,false,false,false,false,false,false},
 			{false,false,false,false,false,false,false,false,false,false},
 	};
+	
+	public String[][] strMoveList={
+			{"You walk north.","You walk east","You walk south","You walk west"},
+			{"You stand still, as you cannot go further north.",
+			"You stand still, as you cannot go further east.",
+			"You stand still, as you cannot go further south.",
+			"You stand still, as you cannot go further west."}
+	};
+	
 	public Unit(int startX, int startY, int speed){
-		int positionX = startX;
-		int positionY = startY;
-		int deltaX = 0;
-		int deltaY = 0;
-		int[][] positionDelta={
-				{-speed,0,speed,0},
-				{0,speed,0,-speed},
-		};
+		speed = speed;
+		positionX = startX;
+		positionY = startY;
+		deltaX = 0;
+		deltaY = 0;
+		positionDelta[0][0]=-speed;
+		positionDelta[1][1]=speed;
+		positionDelta[0][2]=speed;
+		positionDelta[1][3]=-speed;
 		unitMap[positionY][positionX]=true;
 	}
 	
-	public static String executeCommand(int intCommand, Unit activeUnit, Player player){
+	public String executeCommand(int intCommand, Unit activeUnit, Player player, Crocodile crocodile){
 		String strReturn = null;
 		for (int i=0;main.intCommandList.length>i;i++){
 			if (main.intCommandList[i]==intCommand){
 				if (i<4){
-					deltaY=positionDelta[0][i];
-					deltaX=positionDelta[1][i];
-					strReturn=activeUnit.walk(deltaY,deltaX,i);
+					deltaY=activeUnit.positionDelta[0][i];
+					deltaX=activeUnit.positionDelta[1][i];
+					strReturn=activeUnit.walk(deltaY,deltaX,i,activeUnit,player,crocodile);
 				}else if (i==4){
-					strReturn=player.generateMap();
+					strReturn=player.generateMap(player, crocodile);
 				}else if (i==5){
 					strReturn=main.strCommands;
 				}else if(i==6){
@@ -59,16 +69,24 @@ public class Unit {
 		return strReturn;
 	}
 	
-	String walk(int deltaY, int deltaX, int i){
+	String walk(int deltaY, int deltaX, int i, Unit activeUnit, Player player, Crocodile crocodile){
 		String strReturn = null;
-		if (positionY+deltaY<10 && positionY+deltaY>-1 && positionX+deltaX<10 && positionX+deltaX>-1){
-			unitMap[positionY][positionX]=false;
-			positionY+=deltaY;
-			positionX+=deltaX;
-			unitMap[positionY][positionX]=true;
-			strReturn=main.strMoveList[0][i];
+		if (activeUnit.positionY+deltaY<10 && activeUnit.positionY+deltaY>-1 && activeUnit.positionX+deltaX<10 && activeUnit.positionX+deltaX>-1){
+			unitMap[activeUnit.positionY][activeUnit.positionX]=false;
+			activeUnit.positionY+=deltaY;
+			activeUnit.positionX+=deltaX;
+			unitMap[activeUnit.positionY][activeUnit.positionX]=true;
+			if (activeUnit instanceof Player) {
+				strReturn=player.strMoveList[0][i];
+			}else if (activeUnit instanceof Crocodile){
+				strReturn=crocodile.strMoveList[0][i];
+			}
 		}else{
-			strReturn=main.strMoveList[1][i];
+			if (activeUnit instanceof Player) {
+				strReturn=player.strMoveList[1][i];
+			}else if (activeUnit instanceof Crocodile){
+				strReturn=crocodile.strMoveList[1][i];
+			}
 		};
 		return (strReturn);
 	};
