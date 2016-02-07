@@ -20,6 +20,7 @@ public class Crocodile extends Unit{
 	
 	boolean hunt = false;
 	int speed;
+
 	
 	public Crocodile(int startX, int startY, int speed) {
 		super(startX, startY, speed);
@@ -89,4 +90,11 @@ public class Crocodile extends Unit{
 		}
 		return strDirection;
 	};
+
+	public int getDistanceToPlayer(Player player, Crocodile crocodile){
+		int distanceY = Math.abs((crocodile.positionY - player.positionY));
+		int distanceX = Math.abs((crocodile.positionX - player.positionX));
+		int distance = Math.max(distanceY, distanceX);
+		return distance;
+	}
 }

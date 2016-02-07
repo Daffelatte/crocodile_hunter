@@ -19,7 +19,7 @@ public class Player extends Unit {
 		// TODO Auto-generated constructor stub
 	}
 	public String getHeight(Player player) {
-		int intHeight =Map.intActiveMap[player.positionY][player.positionX];
+		int intHeight = Math.abs(9-Map.intActiveMap[player.positionY][player.positionX]);
 		String strReturn = ("\nYou are now standing "+intHeight+" meters above sea level.");
 		return strReturn;
 	}
@@ -28,6 +28,7 @@ public class Player extends Unit {
 	}
 	public String toggleRun(Player player){
 		String strReturn=null;
+		
 		if (player.speed==1){
 			player.speed=4;
 			strReturn="You prepare to run";

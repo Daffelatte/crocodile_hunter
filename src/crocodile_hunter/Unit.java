@@ -1,4 +1,6 @@
 package crocodile_hunter;
+import java.util.Arrays;
+
 import crocodile_hunter.main;
 
 
@@ -55,7 +57,7 @@ public class Unit {
 					deltaX=activeUnit.positionDelta[1][i];
 					strReturn=activeUnit.walk(deltaY,deltaX,i,activeUnit,player,crocodile);
 				}else if (i==4){
-					strReturn=Map.generateStrMap(player, crocodile, Map.generateIntMap());
+					strReturn=Map.generateStrMap(player, crocodile, Map.intActiveMap, Map.strActiveASCIIList);
 				}else if (i==5){
 					strReturn=main.strCommands;
 				}else if(i==6){
@@ -119,7 +121,7 @@ public class Unit {
 			}
 		}
 		return booReturn;
-	}
+	};
 
 	public static void setDifficulty(int intDifficulty) {
 		// TODO Auto-generated method stub
@@ -132,10 +134,60 @@ public class Unit {
 				main.strValidCommands+=", m";
 			};
 			main.alwaysHunt=main.booDifficultyList[3];
+			
+			// independent
 			Map.intActiveMap=Map.intRandomMap;
+			Map.intNumOfPeaks=3;
 			
 		
-	}
+	};
 	
+	public void reLocate(Unit activeUnit, Player player, Crocodile crocodile){
+		int[][] intValidLocations = new int[2][80];
+		int i = 0;
+		int max = 0;
+		// find the highest value in the map (lowest poing in mountain)
+		if (activeUnit==player){
+			for (int a=0;a<10;a++){
+				for (int b=0;b<10;b++){
+					if (Map.intRandomMap[a][b]>max){
+						max=Map.intRandomMap[a][b];
+					};
+				};
+			};
+		};
+		// Find valid locations
+		for (int y=0;y<10;y++){
+			for (int x=0;x<10;x++){
+				if (activeUnit==player && Map.intRandomMap[y][x]==max){
+					intValidLocations[0][i] = y;
+					intValidLocations[1][i] = x;
+					//System.out.println(y+","+x+" is valid");
+					i++;
+				}else{
+					//System.out.println(y+","+x+" is not valid");
+				}
+				if(activeUnit==crocodile){
+					unitMap[crocodile.positionY][crocodile.positionX]=false;
+					crocodile.positionY=y;
+					crocodile.positionX=x;
+					unitMap[crocodile.positionY][crocodile.positionX]=true;
+					if (crocodile.getDistanceToPlayer(player, crocodile)>4 && crocodile.getDistanceToPlayer(player, crocodile)<7){
+						intValidLocations[0][i] = y;
+						intValidLocations[1][i] = x;
+					};
+				};
+			};
+		};
+		// Place unit in a randomly selected valid location
+		int intRandomI = (int) Math.floor(Math.random()*(i));
+		int intValidY = intValidLocations[0][intRandomI];
+		int intValidX = intValidLocations[1][intRandomI];
+		unitMap[activeUnit.positionY][activeUnit.positionX]=false;
+		activeUnit.positionY=intValidY;
+		activeUnit.positionX=intValidX;
+		unitMap[activeUnit.positionY][activeUnit.positionX]=true;
+		//System.out.println(Arrays.deepToString(intValidLocations));
+	};
 
 }

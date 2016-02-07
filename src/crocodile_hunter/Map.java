@@ -27,12 +27,16 @@ public class Map{
 
 	};
 	static int[] intHeightList = {4,4,3,3,2,2,1,1,0,0};
-	static String[] strASCIIList = {" ","@","¤","+","=","~","-",",","."," "};
+	static String[] strFullASCIIList = {" ","@","¤","+","=","~","-",",","."," "  ," "," "," "," "," "};
+	//static String[] strSemiASCIIList = {" ","~","~","~","~","-","-","-","-","-"};
+	static String[] strSemiASCIIList = {" ","-","-","-","-"," "," "," "," "," "  ," "," "," "," "," "};
 	//static String[] strASCIIList = {"0","1","2","3","4","5","6","7","8","9","A","B"};
+	static String[] strActiveASCIIList=strFullASCIIList;
+	static int intNumOfPeaks=1;
 	public static int[][] intActiveMap;
 	public Map(){
 	}
-	public static String generateStrMap(Player player, Crocodile crocodile, int[][] intActiveMap){
+	public static String generateStrMap(Player player, Crocodile crocodile, int[][] intActiveMap, String[] strActiveASCIIList){
 		String strReturn = "You look at your map.\n\n_|0|1|2|3|4|5|6|7|8|9|\n";
 		for(int i=0;i<10;i++) {
 			strReturn+=i+"|";
@@ -42,7 +46,7 @@ public class Map{
             	}else if (crocodile.unitMap[i][j] && main.showCrocodileOnMap){
             		strReturn+="C|";
             	}else{
-            		strReturn+=strASCIIList[Map.intActiveMap[i][j]]+"|";
+            		strReturn+=strActiveASCIIList[Map.intActiveMap[i][j]]+"|";
             	}
             	/*else if (main.showHeightOnMap && (Map.intActiveMap[i][j]>4)){
             		strReturn+="#|";
@@ -58,10 +62,11 @@ public class Map{
 		return (strReturn);
 	}
 	public static int[][] generateIntMap(){
+		System.out.println("Map is being generated.");
 		//start at 0
 		int seedY = (int) Math.floor((Math.random()*10));
 		int seedX = (int) Math.floor((Math.random()*10));
-		for (int i=0;i<3;i++){
+		for (int i=0;i<intNumOfPeaks;i++){
 			//random point
 			seedY = (int) Math.floor((Math.random()*10));
 			seedX = (int) Math.floor((Math.random()*10));
@@ -84,7 +89,6 @@ public class Map{
 				};
 			};
 		};
-
 		Map.intRandomMap[seedY][seedX]=1;
 		return Map.intRandomMap;
 	};
