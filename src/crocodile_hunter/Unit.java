@@ -7,6 +7,7 @@ public class Unit {
 	public int positionY = 9;
 	public int deltaX = 0;
 	public int deltaY = 0;
+	public int speed = 1;
 	public int[][] positionDelta={
 			{-1,0,1,0},
 			{0,1,0,-1},
@@ -32,7 +33,7 @@ public class Unit {
 			"You stand still, as you cannot go further west."}
 	};
 	
-	public Unit(int startX, int startY, int speed){
+	public Unit(int startY, int startX, int speed){
 		speed = speed;
 		positionX = startX;
 		positionY = startY;
@@ -54,12 +55,16 @@ public class Unit {
 					deltaX=activeUnit.positionDelta[1][i];
 					strReturn=activeUnit.walk(deltaY,deltaX,i,activeUnit,player,crocodile);
 				}else if (i==4){
-					strReturn=player.generateMap(player, crocodile);
+					strReturn=Map.generateStrMap(player, crocodile, Map.generateIntMap());
 				}else if (i==5){
 					strReturn=main.strCommands;
 				}else if(i==6){
 					strReturn="You embrace death.";
-					main.isRunning=40;
+					main.booIsRunning=false;
+				}else if (i==7){
+					strReturn=crocodile.hunt(player, crocodile);
+				}else if (i==8){
+					strReturn=player.toggleRun(player);
 				};
 				//strReturn=main.strCommandList[i];
 				break;
@@ -77,7 +82,12 @@ public class Unit {
 			activeUnit.positionX+=deltaX;
 			unitMap[activeUnit.positionY][activeUnit.positionX]=true;
 			if (activeUnit instanceof Player) {
-				strReturn=player.strMoveList[0][i];
+				if (player.speed==1){
+					strReturn=player.strMoveList[0][i];
+				}else if (player.speed==4){
+					strReturn=player.strMoveList[2][i];
+					player.exhasted=true;
+				}
 			}else if (activeUnit instanceof Crocodile){
 				strReturn=crocodile.strMoveList[0][i];
 			}
@@ -90,5 +100,42 @@ public class Unit {
 		};
 		return (strReturn);
 	};
+	
+	public void changeSpeed(Unit activeUnit){
+		activeUnit.positionDelta[0][0]=-activeUnit.speed;
+		activeUnit.positionDelta[1][1]=activeUnit.speed;
+		activeUnit.positionDelta[0][2]=activeUnit.speed;
+		activeUnit.positionDelta[1][3]=-activeUnit.speed;
+	}
+
+	public static boolean isCommandValid(int intPlayerCommand) {
+		boolean booReturn=false;
+		for (int i=0;main.intCommandList.length>i;i++){
+			if (main.intCommandList[i]==intPlayerCommand){
+				/*if (!(i==4 && !main.allowMap)){
+					return true;
+				}*/
+				booReturn=(!(i==4 && !main.allowMap));
+			}
+		}
+		return booReturn;
+	}
+
+	public static void setDifficulty(int intDifficulty) {
+		// TODO Auto-generated method stub
+			main.alwaysGenerateMap=main.booDifficultyList[0];
+			main.showHeightOnMap=main.booDifficultyList[0];
+			main.showCrocodileOnMap=main.booDifficultyList[0];
+			main.allowMap=main.booDifficultyList[1];
+			if (main.booDifficultyList[1]){
+				main.strCommands+="m = Open map\n";
+				main.strValidCommands+=", m";
+			};
+			main.alwaysHunt=main.booDifficultyList[3];
+			Map.intActiveMap=Map.intRandomMap;
+			
+		
+	}
+	
 
 }

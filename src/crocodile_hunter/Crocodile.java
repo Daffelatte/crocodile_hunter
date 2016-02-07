@@ -24,32 +24,13 @@ public class Crocodile extends Unit{
 	public Crocodile(int startX, int startY, int speed) {
 		super(startX, startY, speed);
 		speed=speed;
-		// TODO Auto-generated constructor stub
 	}
 
 	public int chooseCommand(Player player, Crocodile crocodile) {
 		int intReturn=0;
 		int intCommand=0;
-		if (hunt){
-			int distanceY = (crocodile.positionY - player.positionY);
-			int distanceX = (crocodile.positionX - player.positionX);
-			
-			if (distanceY>0){
-				//n
-				intCommand=0;
-				crocodile.executeCommand(110, crocodile, player, crocodile);
-			}else if (distanceY<0){
-				//s
-				intCommand=2;
-				crocodile.executeCommand(115, crocodile, player, crocodile);
-			}
-			if (distanceX>0){
-				// w
-				intCommand=3;
-			}else if (distanceX<0){
-				//e
-				intCommand=1;
-			}
+		if (hunt || main.alwaysHunt){
+			intCommand=7;
 		}else if (!hunt){
 			intCommand=(int) Math.floor(Math.random() * 4);
 			//System.out.println("intCommand = "+intCommand);
@@ -77,11 +58,35 @@ public class Crocodile extends Unit{
 		} else if (!hunt){
 			crocodile.speed=2;
 		}
-		System.out.println("hunt="+hunt);
+		crocodile.changeSpeed(crocodile);
 		strReturn=strDistanceList[distance];
 		return strReturn;
 	};
-
 	
-	
+	public String hunt(Player player, Crocodile crocodile){
+		int distanceY = (crocodile.positionY - player.positionY);
+		int distanceX = (crocodile.positionX - player.positionX);
+		String strDirection="The crocodile prowls ";
+		
+		if (distanceY>0){
+			//n
+			strDirection+="north";
+			crocodile.executeCommand(110, crocodile, player, crocodile);
+			
+		}else if (distanceY<0){
+			//s
+			strDirection+="south";
+			crocodile.executeCommand(115, crocodile, player, crocodile);
+		}
+		if (distanceX>0){
+			// w
+			strDirection+="west.";
+			crocodile.executeCommand(119, crocodile, player, crocodile);
+		}else if (distanceX<0){
+			//e
+			strDirection+="east.";
+			crocodile.executeCommand(101, crocodile, player, crocodile);
+		}
+		return strDirection;
+	};
 }

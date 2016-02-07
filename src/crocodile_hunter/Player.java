@@ -9,38 +9,35 @@ public class Player extends Unit {
 			{"You stand still, as you cannot go further north.",
 			"You stand still, as you cannot go further east.",
 			"You stand still, as you cannot go further south.",
-			"You stand still, as you cannot go further west."}
+			"You stand still, as you cannot go further west."},
+			{"You run north.","You run east","You run south","You run west"}
 	};
+	public boolean exhasted=false;
 	
 	public Player(int startX, int startY, int speed) {
 		super(startX, startY, speed);
 		// TODO Auto-generated constructor stub
 	}
-	public String generateMap(Player player, Crocodile crocodile){
-		String strReturn = "You look at your map.\n\n_|0|1|2|3|4|5|6|7|8|9|\n";
-		for(int i=0;i<10;i++) {
-			strReturn+=i+"|";
-            for(int j=0;j<10;j++) {
-            	if (player.unitMap[i][j]){
-            		strReturn+="P|";
-            	}else if (crocodile.unitMap[i][j]){
-            		strReturn+="C|";
-            	}
-            	else{
-            		strReturn+="_|";
-            	}
-            }
-            strReturn+="\n";
-        }
-		return (strReturn);
-	}
 	public String getHeight(Player player) {
-		int intHeight =Map.intMap[player.positionY][player.positionX];
+		int intHeight =Map.intActiveMap[player.positionY][player.positionX];
 		String strReturn = ("\nYou are now standing "+intHeight+" meters above sea level.");
 		return strReturn;
 	}
 	public boolean checkForMaximum(Player player, int positionY, int positionX) {
-		return Map.intMap[player.positionY][player.positionX]==7;
+		return Map.intActiveMap[player.positionY][player.positionX]==1;
+	}
+	public String toggleRun(Player player){
+		String strReturn=null;
+		if (player.speed==1){
+			player.speed=4;
+			strReturn="You prepare to run";
+			
+		}else if (player.speed==4){
+			player.speed=1;
+			strReturn="Exhasted from the run, you stop to catch your breath.";
+		}
+		player.changeSpeed(player);
+		return strReturn;
 	}
 
 }

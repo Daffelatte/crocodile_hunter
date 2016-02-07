@@ -8,76 +8,143 @@ import crocodile_hunter.Crocodile;
 import crocodile_hunter.Map;
 
 public class main{
-	static String strCommands ="Command list:\n"
+	public static String strCommands ="Command list:\n"
 			+ "n = walk north ^\n"
 			+ "e = walk east  >\n"
 			+ "s = walk south v\n"
 			+ "w = walk west  <\n"
-			+ "m = Open map\n"
 			+ "h = help\n"
-			+ "d = end game\n";
+			+ "d = end game\n"
+			+ "t = toggle run\n";
 	
 
-	static int[] intCommandList=   {110,101,115,119,109,104,100};
+	static int[] intCommandList=   {110,101,115,119,109,104,100,-643,116};
 
-	static int isRunning = 0;
+	static boolean booIsRunning = true;
+	static int intFailsafe = 0;
+	
+	static boolean[] booDifficultyList={false,false,false,false};
+	static String[] strDifficultyList={"easy", "medium", "hard", "Extremly hard"};
+	static int intDifficulty;
+	//public static boolean[] alwaysGenerateMapList={true,false,false,false};;
+	public static boolean alwaysGenerateMap;
+	public static boolean allowMap;
+	public static boolean alwaysHunt;
+	public static boolean showCrocodileOnMap;
+	public static boolean showHeightOnMap;
+	public static String strValidCommands="\" is an invalid command.\n"
+			+ "Valid commands are: n, e, s, w, h, d, t";
 	
 	public static void main(String [ ] args) throws IOException{
 		
-		//boolean isRunning = true;
-		int intPlayerCommand;
+		int intPlayerCommand = 0;
 		int intCrocodileCommand;
 		int intHeight;
 		boolean win=false;
 		String strPlayerMessage=null;
 		String strCrocodileMessage=null;
 		Scanner scanIn = new Scanner(System.in);
+
+		// Choose difficulty
+		System.out.println("Choose difficulty:\n"
+						 + "| 0=easy | 1=medium | 2=hard | 3=Extremly hard |");
 		
+		while(true){
+			
+			// identify difficulty
+			intDifficulty = System.in.read();
+			
+			// Confirm that identity has been chosen
+			if (intDifficulty-48==0 || intDifficulty-48==1 || intDifficulty-48==2 || intDifficulty-48==3){
+				booDifficultyList[intDifficulty-48]=true;
+				System.out.println("You have chosen: \""+strDifficultyList[intDifficulty-48]+"\".\n");
+				break;
+			}else{
+				System.out.println("\""+Character.toString((char)intDifficulty)+"\" is an invalid difficulty.\n"
+						+ "Valid difficulty are: 0, 1, 2, 3\n"
+						+ "Choose difficulty:\n");
+			}
+			// Listens for next input.
+			scanIn.nextLine();
+			
+		}
+		//set difficulty variables
+		Unit.setDifficulty(intDifficulty);
+		
+		int playerY = (int) Math.floor((Math.random()*3)+7);
+		int playerX = (int) Math.floor((Math.random()*3));
+		int CrocodileY = (int) Math.floor((Math.random()*3));
+		int CrocodileX = (int) Math.floor((Math.random()*3)+7);
 		//create Unit instances
-		Player player = new Player(0,9,1);
-		Crocodile crocodile = new Crocodile(8,3,2);
-		
+		Player player = new Player(playerY,playerX,1);
+		Crocodile crocodile = new Crocodile(CrocodileY,CrocodileX,2);
 		
 		System.out.println(strCommands);
 		
-		while(isRunning<40){
-
-			System.out.println("Enter command: ");
-
-			// identify player command
-			intPlayerCommand=System.in.read();
-
-			// execute command
-			strPlayerMessage=player.executeCommand(intPlayerCommand, player, player, crocodile);
-			
-			// Checks if the player has won
-			if (player.checkForMaximum(player,player.positionY,player.positionX)){
-				win=true;
-				break;
-			};
-			
-			//This is necessary, but I don't know why
-			scanIn.nextLine();
-			
-			strPlayerMessage+=player.getHeight(player);
-			
-			System.out.println(strPlayerMessage);
-			
-			// Choose crocodile command
-			intCrocodileCommand=crocodile.chooseCommand(player, crocodile);
-			
-			// execute command
-			strCrocodileMessage=crocodile.executeCommand(intCrocodileCommand, crocodile, player, crocodile);		
-			
-			// compare player and crocodile positions
-			strCrocodileMessage+="\n"+crocodile.checkForPlayer(player, crocodile);
-			
-			System.out.println(strCrocodileMessage);
-			
-			
-			
-			isRunning++;
+		Map.generateStrMap(player, crocodile, Map.generateIntMap());
+		
+		if (alwaysGenerateMap){
+			System.out.println(Map.generateStrMap(player, crocodile, Map.intActiveMap));
 		}
+
+		while(booIsRunning){
+			if (!player.exhasted){
+				System.out.println("Enter command: ");
+				
+				// Listens for next input.
+				scanIn.nextLine();
+	
+				// identify player command
+				intPlayerCommand=System.in.read();
+			}else if (player.exhasted){
+				intPlayerCommand=116;
+				player.exhasted=false;
+			}
+			// validate command
+			if (Unit.isCommandValid(intPlayerCommand)){
+				
+				// execute command
+				strPlayerMessage=player.executeCommand(intPlayerCommand, player, player, crocodile);
+				
+				// Checks if the player has won
+				if (player.checkForMaximum(player,player.positionY,player.positionX)){
+					win=true;
+					break;
+				};
+				
+				//This is necessary, but I don't know why
+				//scanIn.nextLine();
+				
+				strPlayerMessage+=player.getHeight(player);
+				
+				// Print player message
+				System.out.println(strPlayerMessage);
+				
+				// Choose crocodile command
+				intCrocodileCommand=crocodile.chooseCommand(player, crocodile);
+				
+				// execute command
+				strCrocodileMessage=crocodile.executeCommand(intCrocodileCommand, crocodile, player, crocodile);
+				
+				// compare player and crocodile positions
+				strCrocodileMessage+="\n"+crocodile.checkForPlayer(player, crocodile);
+				
+				System.out.println(strCrocodileMessage);
+				
+				if (alwaysGenerateMap){
+					System.out.println(Map.generateStrMap(player, crocodile, Map.intActiveMap));
+				}
+				
+			}else if (!Unit.isCommandValid(intPlayerCommand)){
+				System.out.println("\""+Character.toString((char)intPlayerCommand)+strValidCommands+".");
+			};
+			// This ensures that the while loop is not infinite.
+			intFailsafe++;
+			if (intFailsafe>200){
+				break;
+			}
+		}
+		System.out.println(Map.generateStrMap(player, crocodile, Map.intActiveMap));
 		scanIn.close();
 		if (win){
 			// The sweet ASCII art was generated by this web site (font: Big): http://patorjk.com/software/taag 
