@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 import crocodile_hunter.Unit;
 import crocodile_hunter.Player;
-import crocodile_hunter.Crocodile;
+import crocodile_hunter.Croc;
 import crocodile_hunter.Map;
 
 public class main{
@@ -18,32 +18,32 @@ public class main{
 			+ "t = toggle run\n";
 	
 
-	static int[] intCommandList=   {110,101,115,119,109,104,100,-643,116};
+	static int[] intAr1Command=   {110,101,115,119,109,104,100,-643,116};
 
 	static boolean booIsRunning = true;
 	static int intFailsafe = 0;
 	
-	static boolean[] booDifficultyList={false,false,false,false};
-	static String[] strDifficultyList={"easy", "medium", "hard", "Extremly hard"};
+	static boolean[] booAr1Difficulty={false,false,false,false};
+	static String[] strAr1Difficulty={"easy", "medium", "hard", "Extremly hard"};
 	static int intDifficulty;
 	//public static boolean[] alwaysGenerateMapList={true,false,false,false};;
 	public static boolean alwaysGenerateMap;
 	public static boolean allowMap;
 	public static boolean alwaysHunt;
-	public static boolean showCrocodileOnMap;
+	public static boolean showCrocOnMap;
 	public static boolean showHeightOnMap;
 	public static String strValidCommands="\" is an invalid command.\n"
 			+ "Valid commands are: n, e, s, w, h, d, t";
-	public static boolean[] booGamestateList={true, false};
+	public static boolean[] booAr1Gamestate={true, false};
 	
 	public static void main(String [ ] args) throws IOException{
 		
 		int intPlayerCommand = 0;
-		int intCrocodileCommand;
+		int intCrocCommand;
 		int intHeight;
 		boolean win=false;
 		String strPlayerMessage=null;
-		String strCrocodileMessage=null;
+		String strCrocMessage=null;
 		Scanner scanIn = new Scanner(System.in);
 
 		// Choose difficulty
@@ -53,12 +53,12 @@ public class main{
 		while(true){
 			
 			// identify difficulty
-			intDifficulty = System.in.read();
+			intDifficulty = System.in.read()-48;
 			
 			// Confirm that identity has been chosen
-			if (0<=intDifficulty-48 && intDifficulty-48 <=3){
-				booDifficultyList[intDifficulty-48]=true;
-				System.out.println("You have chosen: \""+strDifficultyList[intDifficulty-48]+"\".\n");
+			if (0<=intDifficulty && intDifficulty <=3){
+				booAr1Difficulty[intDifficulty]=true;
+				System.out.println("You have chosen: \""+strAr1Difficulty[intDifficulty]+"\".\n");
 				break;
 			}else{
 				System.out.println("\""+Character.toString((char)intDifficulty)+"\" is an invalid difficulty.\n"
@@ -74,40 +74,49 @@ public class main{
 		/*
 		int playerY = (int) Math.floor((Math.random()*3)+7);
 		int playerX = (int) Math.floor((Math.random()*3));
-		int CrocodileY = (int) Math.floor((Math.random()*3));
-		int CrocodileX = (int) Math.floor((Math.random()*3)+7);
+		int CrocY = (int) Math.floor((Math.random()*3));
+		int CrocX = (int) Math.floor((Math.random()*3)+7);
 		*/
 		//int playerY = (int) Math.floor((Math.random()*9));
 		//int playerX = (int) Math.floor((Math.random()*9));
-		//int CrocodileY = (int) Math.floor((Math.random()*9));
-		//int CrocodileX = (int) Math.floor((Math.random()*9));
+		//int CrocY = (int) Math.floor((Math.random()*9));
+		//int CrocX = (int) Math.floor((Math.random()*9));
 		//create Unit instances
-		Player player = new Player(0,0,1,1);
-		Crocodile crocodile = new Crocodile(0,0,2,1);
+
+		String[] strAr1PlayerAttack={"punch (HIGH)", "kick (MID)", "sweep (LOW)", "rising sun (GRAB)", "setting sun (ULT)"};
+		String[] strAr1PlayerAttackText={"A punch", "A kick", "A quick legsweep", "Grab and lift your opponent into the air", "Slam your opponent into the ground"};
+		String[] strAr1CrocAttack={"tail whip (HIGH)", "headbutt (MID)", "tail-sweep (LOW)", "bite (GRAB)", "ravage (ULT)"};
+		String[] strAr1CrocAttackText={"A spinning tail kick to the head", "Slam your head into your opponents chest", "A quick legsweep", "Bite and hold your opponent in your jaws", "Violently shake, tearing appart your opponent"};
+		
+		int[] intAr1PlayerHealth={3,2,1,1};
+		int[] intAr1CrocHealth={6,8,10,12};
+		
+		Player player = new Player(0,0,1,intAr1PlayerHealth,1, strAr1PlayerAttack, strAr1PlayerAttackText);
+		Croc croc = new Croc(0,0,2,intAr1CrocHealth,1, strAr1CrocAttack, strAr1CrocAttackText);
 		
 		System.out.println(strCommands);
 		
 		// Generate intMap
 		Map.generateIntMap();
 		if (alwaysGenerateMap){
-			System.out.println(Map.generateStrMap(player, crocodile, Map.intActiveMap, Map.strActiveASCIIList));
+			System.out.println(Map.generateStrMap(player, croc, Map.intAr2ActiveMap, Map.strAr1ActiveASCII));
 		}
 		
 		// Relocate player
-		player.reLocate(player, player, crocodile);
+		player.reLocate(player, player, croc);
 		
 		// Relocate crocodile
-		crocodile.reLocate(crocodile, player, crocodile);
+		croc.reLocate(croc, player, croc);
 		
 		System.out.println("You and the crocodile have been relocated");
 		
 		if (alwaysGenerateMap){
-			System.out.println(Map.generateStrMap(player, crocodile, Map.intActiveMap, Map.strActiveASCIIList));
+			System.out.println(Map.generateStrMap(player, croc, Map.intAr2ActiveMap, Map.strAr1ActiveASCII));
 		}
 
 		while(booIsRunning){
 			//Check game state
-			if (booGamestateList[0]){
+			if (booAr1Gamestate[0]){
 				if (!player.exhasted){
 					System.out.println("Enter command: ");
 					
@@ -124,7 +133,7 @@ public class main{
 				if (Unit.isCommandValid(intPlayerCommand)){
 					
 					// execute command
-					strPlayerMessage=player.executeCommand(intPlayerCommand, player, player, crocodile);
+					strPlayerMessage=player.executeCommand(intPlayerCommand, player, player, croc);
 					
 					// Checks if the player has won
 					if (player.checkForMaximum(player,player.positionY,player.positionX)){
@@ -141,18 +150,18 @@ public class main{
 					System.out.println(strPlayerMessage);
 					
 					// Choose crocodile command
-					intCrocodileCommand=crocodile.chooseCommand(player, crocodile);
+					intCrocCommand=croc.chooseCommand(player, croc);
 					
 					// execute command
-					strCrocodileMessage=crocodile.executeCommand(intCrocodileCommand, crocodile, player, crocodile);
+					strCrocMessage=croc.executeCommand(intCrocCommand, croc, player, croc);
 					
 					// compare player and crocodile positions
-					strCrocodileMessage+="\n"+crocodile.checkForPlayer(player, crocodile);
+					strCrocMessage+="\n"+croc.checkForPlayer(player, croc);
 					
-					System.out.println(strCrocodileMessage);
+					System.out.println(strCrocMessage);
 					
 					if (alwaysGenerateMap){
-						System.out.println(Map.generateStrMap(player, crocodile, Map.intActiveMap, Map.strActiveASCIIList));
+						System.out.println(Map.generateStrMap(player, croc, Map.intAr2ActiveMap, Map.strAr1ActiveASCII));
 					}
 					
 				}else if (!Unit.isCommandValid(intPlayerCommand)){
@@ -160,9 +169,9 @@ public class main{
 				};
 				
 			player.health=1;
-			}else if (booGamestateList[1]){
+			}else if (booAr1Gamestate[1]){
 				int intPlayerAttack;
-				while(player.health>0 && crocodile.health>0){
+				while(player.health>0 && croc.health>0){
 				System.out.println("Choose attack: ");
 				
 				// Listens for next input.
@@ -172,18 +181,18 @@ public class main{
 				intPlayerAttack=System.in.read();
 				
 				// crocodile chooses attack
-				int intCrocodileAttack = crocodile.chooseAttack();
+				int intCrocAttack = croc.chooseAttack();
 				
 				// crocodile attacks
 				// player defends (has X millisecounds to choose a block ( low/mid/high/spam ENTER )
-				crocodile.fight(crocodile, player, player, crocodile, intCrocodileAttack);
+				croc.fight(croc, player, player, croc, intCrocAttack);
 				
 				// Listens for next input.
 				String s=scanIn.nextLine();
 				
 				// player attacks
 				// crocodile defends (RNG)
-				player.fight(player, crocodile, player, crocodile, intCrocodileAttack);
+				player.fight(player, croc, player, croc, intCrocAttack);
 				
 				}
 			}
@@ -195,7 +204,7 @@ public class main{
 			}
 		}
 		
-		System.out.println(Map.generateStrMap(player, crocodile, Map.intActiveMap, Map.strFullASCIIList));
+		System.out.println(Map.generateStrMap(player, croc, Map.intAr2ActiveMap, Map.strAr1FullASCII));
 		scanIn.close();
 		if (win){
 			// The sweet ASCII art was generated by this web site (font: Big): http://patorjk.com/software/taag 

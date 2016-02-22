@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Player extends Unit {
 
-	public String[][] strMoveList={
+	public String[][] strAr2Move={
 			{"You walk north.","You walk east","You walk south","You walk west"},
 			{"You stand still, as you cannot go further north.",
 			"You stand still, as you cannot go further east.",
@@ -13,20 +13,18 @@ public class Player extends Unit {
 			{"You run north.","You run east","You run south","You run west"}
 	};
 	public boolean exhasted=false;
-	public String[] strAttackList={"punch", "kick", "sweep", "takedown/pickup (rising sun)", "slam (setting sun)"};
-	public String[] strAttackDescriptionList={"a punch", "a kick", "a quick legsweep", "lift your opponent into the air", "slam your opponent into the ground"};
 	
-	public Player(int startX, int startY, int speed, int health) {
-		super(startX, startY, speed, health);
+	public Player(int startX, int startY, int speed, int[] intAr1Health, int damage, String[] strAr1Attack, String[] strAr1AttackText) {
+		super(startX, startY, speed, intAr1Health, damage, strAr1Attack, strAr1AttackText);
 		// TODO Auto-generated constructor stub
 	}
 	public String getHeight(Player player) {
-		int intHeight = Math.abs(9-Map.intActiveMap[player.positionY][player.positionX]);
+		int intHeight = Math.abs(9-Map.intAr2ActiveMap[player.positionY][player.positionX]);
 		String strReturn = ("\nYou are now standing "+intHeight+" meters above sea level.");
 		return strReturn;
 	}
 	public boolean checkForMaximum(Player player, int positionY, int positionX) {
-		return Map.intActiveMap[player.positionY][player.positionX]==1;
+		return Map.intAr2ActiveMap[player.positionY][player.positionX]==1;
 	}
 	public String toggleRun(Player player){
 		String strReturn=null;
