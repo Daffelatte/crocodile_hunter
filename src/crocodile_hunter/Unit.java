@@ -14,6 +14,7 @@ public class Unit {
 			{-1,0,1,0},
 			{0,1,0,-1},
 	};
+	public int health = 1;
 	public boolean[][] unitMap = {
 			{false,false,false,false,false,false,false,false,false,false},
 			{false,false,false,false,false,false,false,false,false,false},
@@ -35,7 +36,8 @@ public class Unit {
 			"You stand still, as you cannot go further west."}
 	};
 	
-	public Unit(int startY, int startX, int speed){
+	public Unit(int startY, int startX, int speed, int health){
+		health = health;
 		speed = speed;
 		positionX = startX;
 		positionY = startY;
@@ -190,4 +192,47 @@ public class Unit {
 		//System.out.println(Arrays.deepToString(intValidLocations));
 	};
 
+	
+	public String fight(Unit attackingUnit, Unit defendingUnit, Player player, Crocodile crocodile, int intAttack) {
+		String strReturn=null;
+		String strAttack=null;
+		if (attackingUnit instanceof Player) {
+			attackingUnit = player;
+			defendingUnit = crocodile;
+			
+			int crocodileDef=(int) Math.floor(Math.random()*2);
+			if (crocodileDef==0){
+				//player.damage
+				crocodile.health-=1;
+				strReturn="The crocodile takes 1 damage!";
+			}else if (crocodileDef>0){
+				strReturn="The crocodile evades the attack!";
+			}
+		}
+		if (attackingUnit instanceof Player) {
+			attackingUnit = crocodile;
+			defendingUnit = player;
+		}
+		
+		strAttack = attackingUnit.strAttackList[intAttack];
+		if (defendingUnit instanceof Player) {
+			for (int i=0;i<5;i++){
+				try {
+				    Thread.sleep(200);
+				} catch(InterruptedException ex) {
+				    Thread.currentThread().interrupt();
+				}
+				String[] strLoadingList = {
+						".",
+						".",
+						".",
+						".",
+						"-",
+			};
+			System.out.println(strLoadingList[i]);
+		}
+	}
+		return strReturn;
+		
+	}
 }

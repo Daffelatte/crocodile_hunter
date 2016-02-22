@@ -20,10 +20,12 @@ public class Crocodile extends Unit{
 	
 	boolean hunt = false;
 	int speed;
-
 	
-	public Crocodile(int startX, int startY, int speed) {
-		super(startX, startY, speed);
+	public String[] strAttackList={"mid-headbutt", "high-tail whip", "low-spinning-tail-sweep", "bite ()", "ravage ()"};
+	public String[] strAttackDescriptionList={"slam your head into your opponent", "A spinning tail kick", "A quick legsweep", "Bite and hold your opponent in your jaws", "Violently shake, tearing appart your opponent"};
+	
+	public Crocodile(int startX, int startY, int speed, int health) {
+		super(startX, startY, speed, health);
 		speed=speed;
 	}
 
@@ -50,7 +52,11 @@ public class Crocodile extends Unit{
 			distance=4;
 		}
 		if (distance==0){
-			player.executeCommand(100, player, player, crocodile);
+			//player.executeCommand(100, player, player, crocodile);
+			
+			// change game state
+			main.booGamestateList[0]=false;
+			main.booGamestateList[1]=true;
 		}else if (distance<=3){
 			hunt=true;
 		}
@@ -97,4 +103,10 @@ public class Crocodile extends Unit{
 		int distance = Math.max(distanceY, distanceX);
 		return distance;
 	}
+
+	public int chooseAttack() {
+		int intReturn = (int) Math.floor(Math.random() * 4);
+		return (intReturn);
+	}
+
 }

@@ -13,9 +13,11 @@ public class Player extends Unit {
 			{"You run north.","You run east","You run south","You run west"}
 	};
 	public boolean exhasted=false;
+	public String[] strAttackList={"punch", "kick", "sweep", "takedown/pickup (rising sun)", "slam (setting sun)"};
+	public String[] strAttackDescriptionList={"a punch", "a kick", "a quick legsweep", "lift your opponent into the air", "slam your opponent into the ground"};
 	
-	public Player(int startX, int startY, int speed) {
-		super(startX, startY, speed);
+	public Player(int startX, int startY, int speed, int health) {
+		super(startX, startY, speed, health);
 		// TODO Auto-generated constructor stub
 	}
 	public String getHeight(Player player) {
@@ -28,7 +30,6 @@ public class Player extends Unit {
 	}
 	public String toggleRun(Player player){
 		String strReturn=null;
-		
 		if (player.speed==1){
 			player.speed=4;
 			strReturn="You prepare to run";
