@@ -44,7 +44,6 @@ public class main{
 		boolean win=false;
 		String strPlayerMessage=null;
 		String strCrocMessage=null;
-		
 		Scanner scanIn = new Scanner(System.in);
 
 		// Choose difficulty
@@ -84,9 +83,8 @@ public class main{
 		//int CrocX = (int) Math.floor((Math.random()*9));
 		//create Unit instances
 
-		
 		String[] strAr1PlayerAttack={"punch (HIGH)", "kick (MID)", "sweep (LOW)", "rising sun (GRAB)", "setting sun (ULT)"};
-		String[] strAr1PlayerAttackText={"You punch the crocodile in the face", "You kick the crocodile in the chest", "You quickly sweep the crocodiles legs", "You grab and lift your opponent into the air", "You slam your opponent into the ground"};
+		String[] strAr1PlayerAttackText={"A punch", "A kick", "A quick legsweep", "Grab and lift your opponent into the air", "Slam your opponent into the ground"};
 		String[] strAr1CrocAttack={"tail whip (HIGH)", "headbutt (MID)", "tail-sweep (LOW)", "bite (GRAB)", "ravage (ULT)"};
 		String[] strAr1CrocAttackText={"A spinning tail kick to the head", "Slam your head into your opponents chest", "A quick legsweep", "Bite and hold your opponent in your jaws", "Violently shake, tearing appart your opponent"};
 		
@@ -105,10 +103,10 @@ public class main{
 		}
 		
 		// Relocate player
-		//player.reLocate(player, player, croc);
+		player.reLocate(player, player, croc);
 		
 		// Relocate crocodile
-		//croc.reLocate(croc, player, croc);
+		croc.reLocate(croc, player, croc);
 		
 		System.out.println("You and the crocodile have been relocated");
 		
@@ -174,31 +172,27 @@ public class main{
 			}else if (booAr1Gamestate[1]){
 				int intPlayerAttack;
 				while(player.health>0 && croc.health>0){
-				//System.out.println("Choose attack: ");
+				System.out.println("Choose attack: ");
 				
 				// Listens for next input.
-				//scanIn.nextLine();
+				scanIn.nextLine();
 		
 				// identify player attack
-				//intPlayerAttack=System.in.read()-48;
+				intPlayerAttack=System.in.read();
 				
 				// crocodile chooses attack
 				int intCrocAttack = croc.chooseAttack();
 				
-				System.out.println("crocodile is choosing attack...");
-				try {
-				    Thread.sleep(2000);
-				} catch(InterruptedException ex) {
-				    Thread.currentThread().interrupt();
-				}
-				
 				// crocodile attacks
 				// player defends (has X millisecounds to choose a block ( low/mid/high/spam ENTER )
-				System.out.println(croc.fight(croc, player, player, croc, intCrocAttack));
+				croc.fight(croc, player, player, croc, intCrocAttack);
+				
+				// Listens for next input.
+				String s=scanIn.nextLine();
 				
 				// player attacks
 				// crocodile defends (RNG)
-				//player.fight(player, croc, player, croc, intPlayerAttack);
+				player.fight(player, croc, player, croc, intCrocAttack);
 				
 				}
 			}
