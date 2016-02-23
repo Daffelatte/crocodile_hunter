@@ -178,31 +178,20 @@ public class main{
 			}else if (booAr1Gamestate[1]){
 				int intPlayerAttack;
 				while(player.health>0 && croc.health>0){
-				//System.out.println("Choose attack: ");
-				
-				// Listens for next input.
-				//scanIn.nextLine();
-		
-				// identify player attack
-				//intPlayerAttack=System.in.read()-48;
-				
+
 				// crocodile chooses attack
 				int intCrocAttack = croc.chooseAttack();
 				
-				System.out.println("crocodile is choosing attack...");
-				try {
-				    Thread.sleep(2000);
-				} catch(InterruptedException ex) {
-				    Thread.currentThread().interrupt();
-				}
-				
 				// crocodile attacks
-				// player defends (has X millisecounds to choose a block ( low/mid/high/spam ENTER )
-				System.out.println(croc.fight(croc, player, player, croc, intCrocAttack));
+				System.out.println(croc.attack(player, intCrocAttack));
+				
+				// Player chooses attack
+				System.out.println("Choose attack: ");
+				scanIn.nextLine();
+				intPlayerAttack=System.in.read()-48;
 				
 				// player attacks
-				// crocodile defends (RNG)
-				//player.fight(player, croc, player, croc, intPlayerAttack);
+				System.out.println(player.attack(croc, intPlayerAttack));
 				
 				}
 			}

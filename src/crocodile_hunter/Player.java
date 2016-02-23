@@ -1,5 +1,6 @@
 package crocodile_hunter;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 public class Player extends Unit {
@@ -38,6 +39,43 @@ public class Player extends Unit {
 		}
 		player.changeSpeed(player);
 		return strReturn;
+	}
+	public String attack(Croc defender, int intPlayerAttack) {
+		// TODO Auto-generated method stub
+		defender.defend(this, intPlayerAttack);
+		
+		return null;
+	}
+	public String defend(Unit attacker, int intAttack) {
+		// TODO Auto-generated method stub
+		int intPlayerCommand = 0;
+		String strReturn;
+		int[] intAr1DefCommand={1,2,3,4};
+
+		try {
+		    Thread.sleep(2000);
+		} catch(InterruptedException ex) {
+		    Thread.currentThread().interrupt();
+		}
+		
+		try {
+			intPlayerCommand = System.in.read()-48;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if (intPlayerCommand==intAr1DefCommand[intAttack]){
+			strReturn="You evaded the attack!";
+		}else if(!(intPlayerCommand==intAr1DefCommand[intAttack])){
+			this.health-=attacker.damage;
+			strReturn="You take "+attacker.damage+" damage!";
+		};
+		
+
+		System.out.print(intPlayerCommand+"!="+intAr1DefCommand[intAttack]+"\n");
+
+		return null;
 	}
 
 }

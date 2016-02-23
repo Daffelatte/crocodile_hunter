@@ -103,7 +103,34 @@ public class Croc extends Unit{
 
 	public int chooseAttack() {
 		int intReturn = (int) Math.floor(Math.random() * 4);
+		System.out.println("crocodile is choosing attack...");
+		try {
+		    Thread.sleep(1000);
+		} catch(InterruptedException ex) {
+		    Thread.currentThread().interrupt();
+		}
 		return (intReturn);
+	}
+
+	public String attack(Player defender, int intAttack) {
+		// TODO Auto-generated method stub
+		
+		defender.defend(this, intAttack);
+		return null;
+	}
+
+	public String defend(Player attacker, int intAttack) {
+		// TODO Auto-generated method stub
+		String strReturn=null;
+		
+		int crocDef=(int) Math.floor(Math.random()*2);
+		if (crocDef==0){
+			this.health-=attacker.damage;
+			strReturn="The crocodile takes "+attacker.damage+" damage!";
+		}else if (crocDef>0){
+			strReturn="The crocodile evades the attack!";
+		}
+		return null;
 	}
 
 }
