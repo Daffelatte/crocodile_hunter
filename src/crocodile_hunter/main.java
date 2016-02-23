@@ -94,7 +94,7 @@ public class main{
 		String[] strAr1CrocAttackText={"A spinning tail kick to the head", "Slam your head into your opponents chest", "A quick legsweep", "Bite and hold your opponent in your jaws", "Violently shake, tearing appart your opponent"};
 		
 		int[] intAr1PlayerHealth={3,2,1,1};
-		int[] intAr1CrocHealth={6,8,10,12};
+		int[] intAr1CrocHealth={1,8,10,12};
 		
 		Player player = new Player(0,0,1,intAr1PlayerHealth,1, strAr1PlayerAttack, strAr1PlayerAttackText);
 		Croc croc = new Croc(0,0,2,intAr1CrocHealth,1, strAr1CrocAttack, strAr1CrocAttackText);
@@ -178,21 +178,31 @@ public class main{
 			}else if (booAr1Gamestate[1]){
 				int intPlayerAttack;
 				while(player.health>0 && croc.health>0){
-
-				// crocodile chooses attack
-				int intCrocAttack = croc.chooseAttack();
-				
-				// crocodile attacks
-				System.out.println(croc.attack(player, intCrocAttack));
-				
-				// Player chooses attack
-				System.out.println("Choose attack: ");
-				scanIn.nextLine();
-				intPlayerAttack=System.in.read()-48;
-				
-				// player attacks
-				System.out.println(player.attack(croc, intPlayerAttack));
-				
+	
+					// crocodile chooses attack
+					int intCrocAttack = croc.chooseAttack();
+					
+					// crocodile attacks
+					System.out.println(croc.attack(player, intCrocAttack));
+					
+					if (player.health<=0){
+						break;
+					}
+					
+					// Player chooses attack
+					System.out.println("Choose attack: ");
+					scanIn.nextLine();
+					intPlayerAttack=System.in.read()-48;
+					
+					// player attacks
+					System.out.println(player.attack(croc, intPlayerAttack));
+					
+					if (croc.health<=0){
+						booAr1Gamestate[1]=false;
+						booAr1Gamestate[0]=true;
+						croc.reLocate(croc, player, croc);
+						System.out.println("The crocodile flees");
+					}
 				}
 			}
 			

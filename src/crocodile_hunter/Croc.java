@@ -114,9 +114,8 @@ public class Croc extends Unit{
 
 	public String attack(Player defender, int intAttack) {
 		// TODO Auto-generated method stub
-		
-		defender.defend(this, intAttack);
-		return null;
+		System.out.println(this.strAr1Attack[intAttack]);
+		return defender.defend(this, intAttack);
 	}
 
 	public String defend(Player attacker, int intAttack) {
@@ -130,7 +129,7 @@ public class Croc extends Unit{
 		}else if (crocDef>0){
 			strReturn="The crocodile evades the attack!";
 		}
-		return null;
+		return strReturn;
 	}
 
 }

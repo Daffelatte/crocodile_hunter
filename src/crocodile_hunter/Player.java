@@ -2,6 +2,7 @@ package crocodile_hunter;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Player extends Unit {
 
@@ -42,22 +43,17 @@ public class Player extends Unit {
 	}
 	public String attack(Croc defender, int intPlayerAttack) {
 		// TODO Auto-generated method stub
-		defender.defend(this, intPlayerAttack);
 		
-		return null;
+		return defender.defend(this, intPlayerAttack);
 	}
 	public String defend(Unit attacker, int intAttack) {
 		// TODO Auto-generated method stub
+		Scanner scanIn = new Scanner(System.in);
 		int intPlayerCommand = 0;
-		String strReturn;
+		String strReturn = null;
 		int[] intAr1DefCommand={1,2,3,4};
 
-		try {
-		    Thread.sleep(2000);
-		} catch(InterruptedException ex) {
-		    Thread.currentThread().interrupt();
-		}
-		
+		scanIn.nextLine();
 		try {
 			intPlayerCommand = System.in.read()-48;
 		} catch (IOException e) {
@@ -73,9 +69,9 @@ public class Player extends Unit {
 		};
 		
 
-		System.out.print(intPlayerCommand+"!="+intAr1DefCommand[intAttack]+"\n");
+		System.out.print(intPlayerCommand+" == "+intAr1DefCommand[intAttack]+"\n");
 
-		return null;
+		return strReturn;
 	}
 
 }
