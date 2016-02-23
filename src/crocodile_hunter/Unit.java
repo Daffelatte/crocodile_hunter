@@ -1,5 +1,7 @@
 package crocodile_hunter;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import crocodile_hunter.main;
 
@@ -211,42 +213,63 @@ public class Unit {
 	public String fight(Unit attackingUnit, Unit defendingUnit, Player player, Croc croc, int intAttack) {
 		String strReturn=null;
 		String strAttack=null;
+		int[] intAr1DefCommand={1,2,3,4};
+		Scanner scanIn = new Scanner(System.in);
+		scanIn.nextLine();
+		
+		System.out.println(this.strAr1Attack[intAttack]);
+		
 		if (attackingUnit instanceof Player) {
 			attackingUnit = player;
 			defendingUnit = croc;
 			
+			
 			int crocDef=(int) Math.floor(Math.random()*2);
 			if (crocDef==0){
-				//player.damage
 				croc.health-=player.damage;
 				strReturn="The crocodile takes "+player.damage+" damage!";
 			}else if (crocDef>0){
 				strReturn="The crocodile evades the attack!";
 			}
 		}
-		if (attackingUnit instanceof Player) {
+		if (attackingUnit instanceof Croc) {
+			
+			
 			attackingUnit = croc;
 			defendingUnit = player;
+			
+			strAttack = attackingUnit.strAr1Attack[intAttack];
+			System.out.println(strAttack);
+
+
+			int intPlayerCommand = 0;
+			try {
+				intPlayerCommand = System.in.read()-48;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			try {
+			    Thread.sleep(5000);
+			} catch(InterruptedException ex) {
+			    Thread.currentThread().interrupt();
+			}
+
+			
+			if (intPlayerCommand==intAr1DefCommand[intAttack]){
+				strReturn="You evaded the attack!";
+			}else if(!(intPlayerCommand==intAr1DefCommand[intAttack])){
+				player.health-=croc.damage;
+				strReturn="You take "+croc.damage+" damage!";
+			};
+			System.out.print(intPlayerCommand+"!="+intAr1DefCommand[intAttack]);
+
+			
 		}
 		
-		strAttack = attackingUnit.strAr1Attack[intAttack];
-		if (attackingUnit instanceof Unit) {
-			for (int i=0;i<5;i++){
-				try {
-				    Thread.sleep(200);
-				} catch(InterruptedException ex) {
-				    Thread.currentThread().interrupt();
-				}
-				String[] strAr1Loading = {
-						".",
-						".",
-						".",
-						".",
-						"-",
-			};
-			System.out.println(strAr1Loading[i]);
-		}
-	}
+
+		scanIn.close();
 		return strReturn;
 		
 	}
