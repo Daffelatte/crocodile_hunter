@@ -35,6 +35,9 @@ public class main{
 	public static String strValidCommands="\" is an invalid command.\n"
 			+ "Valid commands are: n, e, s, w, h, d, t";
 	public static boolean[] booAr1Gamestate={true, false};
+
+
+	public static boolean first;
 	
 	public static void main(String [ ] args) throws IOException{
 		
@@ -85,9 +88,9 @@ public class main{
 		//create Unit instances
 
 		
-		String[] strAr1PlayerAttack={"punch (HIGH)", "kick (MID)", "sweep (LOW)", "rising sun (GRAB)", "setting sun (ULT)"};
+		String[] strAr1PlayerAttack={"punch (1)", "kick (2)", "sweep (3)", "rising sun (4)", "setting sun (5)"};
 		String[] strAr1PlayerAttackText={"You punch the crocodile in the face", "You kick the crocodile in the chest", "You quickly sweep the crocodiles legs", "You grab and lift your opponent into the air", "You slam your opponent into the ground"};
-		String[] strAr1CrocAttack={"tail whip (HIGH)", "headbutt (MID)", "tail-sweep (LOW)", "bite (GRAB)", "ravage (ULT)"};
+		String[] strAr1CrocAttack={"tail whip (1)", "headbutt (2)", "tail-sweep (3)", "bite (4)", "ravage (5)"};
 		String[] strAr1CrocAttackText={"A spinning tail kick to the head", "Slam your head into your opponents chest", "A quick legsweep", "Bite and hold your opponent in your jaws", "Violently shake, tearing appart your opponent"};
 		
 		int[] intAr1PlayerHealth={3,2,1,1};
@@ -171,6 +174,7 @@ public class main{
 				};
 				
 			player.health=1;
+			first=true;
 			}else if (booAr1Gamestate[1]){
 				int intPlayerAttack;
 				while(player.health>0 && croc.health>0){

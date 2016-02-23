@@ -215,8 +215,10 @@ public class Unit {
 		String strAttack=null;
 		int[] intAr1DefCommand={1,2,3,4};
 		Scanner scanIn = new Scanner(System.in);
-		scanIn.nextLine();
-		
+		if (main.first){
+			scanIn.nextLine();
+			main.first=false;
+		}
 		System.out.println(this.strAr1Attack[intAttack]);
 		
 		if (attackingUnit instanceof Player) {
@@ -239,7 +241,7 @@ public class Unit {
 			defendingUnit = player;
 			
 			strAttack = attackingUnit.strAr1Attack[intAttack];
-			System.out.println(strAttack);
+			//System.out.println(strAttack);
 
 
 			int intPlayerCommand = 0;
@@ -251,7 +253,7 @@ public class Unit {
 			}
 			
 			try {
-			    Thread.sleep(5000);
+			    Thread.sleep(3000);
 			} catch(InterruptedException ex) {
 			    Thread.currentThread().interrupt();
 			}
@@ -267,9 +269,9 @@ public class Unit {
 
 			
 		}
-		
 
-		scanIn.close();
+		scanIn.nextLine();
+
 		return strReturn;
 		
 	}
