@@ -43,8 +43,9 @@ public class Player extends Unit {
 	}
 	public String attack(Croc defender, int intPlayerAttack) {
 		// TODO Auto-generated method stub
-		
+		System.out.println(strAr1AttackText[intPlayerAttack-1]);
 		return defender.defend(this, intPlayerAttack);
+		
 	}
 	public String defend(Unit attacker, int intAttack) {
 		// TODO Auto-generated method stub

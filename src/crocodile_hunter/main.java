@@ -93,11 +93,11 @@ public class main{
 		String[] strAr1CrocAttack={"tail whip (1)", "headbutt (2)", "tail-sweep (3)", "bite (4)", "ravage (5)"};
 		String[] strAr1CrocAttackText={"A spinning tail kick to the head", "Slam your head into your opponents chest", "A quick legsweep", "Bite and hold your opponent in your jaws", "Violently shake, tearing appart your opponent"};
 		
-		int[] intAr1PlayerHealth={3,2,1,1};
-		int[] intAr1CrocHealth={1,8,10,12};
+		int[] intAr1PlayerHealth={6,4,2,1};
+		int[] intAr1CrocHealth={6,8,10,12};
 		
-		Player player = new Player(0,0,1,intAr1PlayerHealth,1, strAr1PlayerAttack, strAr1PlayerAttackText);
-		Croc croc = new Croc(0,0,2,intAr1CrocHealth,1, strAr1CrocAttack, strAr1CrocAttackText);
+		Player player = new Player(0,0,1,intAr1PlayerHealth,2, strAr1PlayerAttack, strAr1PlayerAttackText);
+		Croc croc = new Croc(0,0,2,intAr1CrocHealth,2, strAr1CrocAttack, strAr1CrocAttackText);
 		
 		System.out.println(strCommands);
 		
@@ -108,10 +108,10 @@ public class main{
 		}
 		
 		// Relocate player
-		//player.reLocate(player, player, croc);
+		player.reLocate(player, player, croc);
 		
 		// Relocate crocodile
-		//croc.reLocate(croc, player, croc);
+		croc.reLocate(croc, player, croc);
 		
 		System.out.println("You and the crocodile have been relocated");
 		
@@ -178,6 +178,13 @@ public class main{
 			}else if (booAr1Gamestate[1]){
 				int intPlayerAttack;
 				while(player.health>0 && croc.health>0){
+					//System.out.println("Player health: "+player.health+"\n"
+							//+ "Crocodile health: "+croc.health+"\n");
+					
+					// Player chooses attack
+					//System.out.println("Continue? (y/n)");
+					//scanIn.nextLine();
+					//System.in.read();
 	
 					// crocodile chooses attack
 					int intCrocAttack = croc.chooseAttack();
@@ -197,11 +204,19 @@ public class main{
 					// player attacks
 					System.out.println(player.attack(croc, intPlayerAttack));
 					
+					try {
+					    Thread.sleep(1500);
+					} catch(InterruptedException ex) {
+					    Thread.currentThread().interrupt();
+					}
+					
 					if (croc.health<=0){
 						booAr1Gamestate[1]=false;
 						booAr1Gamestate[0]=true;
+						croc.health = intAr1CrocHealth[main.intDifficulty];
 						croc.reLocate(croc, player, croc);
-						System.out.println("The crocodile flees");
+						System.out.println("Defeted, The crocodile flees to recover strengh.");
+						break;
 					}
 				}
 			}
