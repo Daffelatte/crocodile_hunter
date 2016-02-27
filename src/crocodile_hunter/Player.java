@@ -41,10 +41,15 @@ public class Player extends Unit {
 		player.changeSpeed(player);
 		return strReturn;
 	}
-	public String attack(Croc defender, int intPlayerAttack) {
-		// TODO Auto-generated method stub
-		System.out.println(strAr1AttackText[intPlayerAttack-1]);
-		return defender.defend(this, intPlayerAttack);
+	public String attack(Croc defender, int intAttack) {
+		String strReturn=null;
+		if (this.booRestrained){
+			strReturn="You are restrained, and cannot attack";
+		}else if (!this.booRestrained){
+		System.out.println(strAr1AttackText[intAttack-1]);
+		defender.defend(this, intAttack);
+		}
+		return strReturn;
 		
 	}
 	public String defend(Unit attacker, int intAttack) {
@@ -63,10 +68,20 @@ public class Player extends Unit {
 		}
 		
 		if (intPlayerCommand==intAr1DefCommand[intAttack]){
-			strReturn="You evaded the attack!";
+			if (this.booRestrained){
+				this.booRestrained=false;
+				strReturn="You breaks free";
+			}else if (!(intAttack==4)){
+				strReturn="You evaded the attack!";
+			}
 		}else if(!(intPlayerCommand==intAr1DefCommand[intAttack])){
-			this.health-=attacker.damage;
-			strReturn="You take "+attacker.damage+" damage!";
+			if (intAttack==4){
+				this.booRestrained=true;
+				strReturn="The crocodile holds you in it's jaws";
+			}else if (!(intAttack==4)){
+				this.health-=attacker.damage;
+				strReturn="You take "+attacker.damage+" damage!";
+			}
 		};
 		
 

@@ -17,6 +17,7 @@ public class Unit {
 	public int damage;
 	public String[] strAr1Attack;
 	public String[] strAr1AttackText;
+	public boolean booRestrained = false;
 	
 	public int[][] positionDelta={
 			{-1,0,1,0},

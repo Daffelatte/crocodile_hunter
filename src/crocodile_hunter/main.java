@@ -178,16 +178,9 @@ public class main{
 			}else if (booAr1Gamestate[1]){
 				int intPlayerAttack;
 				while(player.health>0 && croc.health>0){
-					//System.out.println("Player health: "+player.health+"\n"
-							//+ "Crocodile health: "+croc.health+"\n");
-					
-					// Player chooses attack
-					//System.out.println("Continue? (y/n)");
-					//scanIn.nextLine();
-					//System.in.read();
 	
 					// crocodile chooses attack
-					int intCrocAttack = croc.chooseAttack();
+					int intCrocAttack = croc.chooseAttack(player);
 					
 					// crocodile attacks
 					System.out.println(croc.attack(player, intCrocAttack));

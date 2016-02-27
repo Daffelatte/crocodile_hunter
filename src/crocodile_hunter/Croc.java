@@ -101,33 +101,53 @@ public class Croc extends Unit{
 		return distance;
 	}
 
-	public int chooseAttack() {
-		int intReturn = (int) Math.floor(Math.random() * 4);
-		System.out.println("crocodile is choosing attack...");
-		try {
-		    Thread.sleep(1000);
-		} catch(InterruptedException ex) {
-		    Thread.currentThread().interrupt();
+	public int chooseAttack(Player defender) {
+		int intReturn=0;
+		if (defender.booRestrained){
+			intReturn = 5;
+		}else if (!defender.booRestrained){
+			intReturn = (int) Math.floor(Math.random() * 4);
+			System.out.println("crocodile is choosing attack...");
+			try {
+			    Thread.sleep(1000);
+			} catch(InterruptedException ex) {
+			    Thread.currentThread().interrupt();
+			}
 		}
 		return (intReturn);
 	}
 
 	public String attack(Player defender, int intAttack) {
-		// TODO Auto-generated method stub
+		String strReturn=null;
+		if (this.booRestrained){
+			strReturn="The crocodile is restrained, and cannot attack";
+		}else if (!this.booRestrained){
 		System.out.println(this.strAr1Attack[intAttack]);
-		return defender.defend(this, intAttack);
+		strReturn=defender.defend(this, intAttack);
+		}
+		return strReturn;
 	}
 
 	public String defend(Player attacker, int intAttack) {
 		// TODO Auto-generated method stub
 		String strReturn=null;
 		
-		int crocDef=(int) Math.floor(Math.random()*2);
-		if (crocDef==0){
-			this.health-=attacker.damage;
-			strReturn="The crocodile takes "+attacker.damage+" damage!";
+		int crocDef=(int) Math.floor(Math.random()*4);
+		if (crocDef<=1){
+			if (intAttack==4){
+				this.booRestrained=true;
+				strReturn="You hold the crocodile in the air";
+			}else if (!(intAttack==4)){
+				this.health-=attacker.damage;
+				strReturn="The crocodile takes "+attacker.damage+" damage!";
+			}
 		}else if (crocDef>0){
-			strReturn="The crocodile evades the attack!";
+			if (this.booRestrained){
+				this.booRestrained=false;
+				strReturn="The crocodile breaks free";
+			}else if (!(intAttack==4)){
+				strReturn="The crocodile evades the attack!";
+			}
 		}
 		return strReturn;
 	}
