@@ -17,6 +17,7 @@ public class Unit {
 	public int damage;
 	public String[] strAr1Attack;
 	public String[] strAr1AttackText;
+	public String strRestrainedText;
 	public boolean booRestrained = false;
 	
 	public int[][] positionDelta={
@@ -45,7 +46,7 @@ public class Unit {
 	};
 
 	
-	public Unit(int startY, int startX, int speed, int[] intAr1Health, int damage, String[] strAr1Attack, String[] strAr1AttackText){
+	public Unit(int startY, int startX, int speed, int[] intAr1Health, int damage, String[] strAr1Attack, String[] strAr1AttackText, String strRestrainedText){
 		
 		System.out.println(main.intDifficulty);
 		this.health = intAr1Health[main.intDifficulty];
@@ -53,6 +54,7 @@ public class Unit {
 		this.damage = damage;
 		this.strAr1Attack = strAr1Attack;
 		this.strAr1AttackText = strAr1AttackText;
+		this.strRestrainedText = strRestrainedText;
 		
 		positionX = startX;
 		positionY = startY;
@@ -208,6 +210,15 @@ public class Unit {
 		activeUnit.positionX=intValidX;
 		booAr2unitMap[activeUnit.positionY][activeUnit.positionX]=true;
 		//System.out.println(Arrays.deepToString(intValidLocations));
+	};
+	public String validateAttack(int intAttack){
+		String strReturn = null;
+		if (this.booRestrained){
+			strReturn=this.strRestrainedText;
+		}else if (!this.booRestrained){
+			strReturn="valid";
+		}
+		return strReturn;
 	};
 
 }

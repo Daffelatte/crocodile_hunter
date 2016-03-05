@@ -16,8 +16,8 @@ public class Player extends Unit {
 	};
 	public boolean exhasted=false;
 	
-	public Player(int startX, int startY, int speed, int[] intAr1Health, int damage, String[] strAr1Attack, String[] strAr1AttackText) {
-		super(startX, startY, speed, intAr1Health, damage, strAr1Attack, strAr1AttackText);
+	public Player(int startX, int startY, int speed, int[] intAr1Health, int damage, String[] strAr1Attack, String[] strAr1AttackText, String strRestrainedText) {
+		super(startX, startY, speed, intAr1Health, damage, strAr1Attack, strAr1AttackText, strRestrainedText);
 		// TODO Auto-generated constructor stub
 	}
 	public String getHeight(Player player) {
@@ -41,14 +41,11 @@ public class Player extends Unit {
 		player.changeSpeed(player);
 		return strReturn;
 	}
+	
 	public String attack(Croc defender, int intAttack) {
 		String strReturn=null;
-		if (this.booRestrained){
-			strReturn="You are restrained, and cannot attack";
-		}else if (!this.booRestrained){
 		System.out.println(strAr1AttackText[intAttack-1]);
-		defender.defend(this, intAttack);
-		}
+		strReturn=defender.defend(this, intAttack);
 		return strReturn;
 		
 	}
@@ -57,7 +54,7 @@ public class Player extends Unit {
 		Scanner scanIn = new Scanner(System.in);
 		int intPlayerCommand = 0;
 		String strReturn = null;
-		int[] intAr1DefCommand={1,2,3,4};
+		int[] intAr1DefCommand={1,2,3,4,5};
 
 		scanIn.nextLine();
 		try {
@@ -71,14 +68,19 @@ public class Player extends Unit {
 			if (this.booRestrained){
 				this.booRestrained=false;
 				strReturn="You breaks free";
-			}else if (!(intAttack==4)){
+			}else if (!(intAttack==3)){
 				strReturn="You evaded the attack!";
 			}
 		}else if(!(intPlayerCommand==intAr1DefCommand[intAttack])){
-			if (intAttack==4){
+			if (intAttack==3){
 				this.booRestrained=true;
 				strReturn="The crocodile holds you in it's jaws";
-			}else if (!(intAttack==4)){
+			}else if (intAttack==4){
+				this.booRestrained=false;
+				this.health-=2*attacker.damage;
+				strReturn="You take "+2*attacker.damage+" damage!";
+			}else{
+				System.out.println(intAttack+"!=4");
 				this.health-=attacker.damage;
 				strReturn="You take "+attacker.damage+" damage!";
 			}

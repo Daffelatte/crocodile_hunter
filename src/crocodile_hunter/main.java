@@ -90,14 +90,16 @@ public class main{
 		
 		String[] strAr1PlayerAttack={"punch (1)", "kick (2)", "sweep (3)", "rising sun (4)", "setting sun (5)"};
 		String[] strAr1PlayerAttackText={"You punch the crocodile in the face", "You kick the crocodile in the chest", "You quickly sweep the crocodiles legs", "You grab and lift your opponent into the air", "You slam your opponent into the ground"};
+		String strPlayerRestrainedText="You are restrained, and cannot attack";
 		String[] strAr1CrocAttack={"tail whip (1)", "headbutt (2)", "tail-sweep (3)", "bite (4)", "ravage (5)"};
 		String[] strAr1CrocAttackText={"A spinning tail kick to the head", "Slam your head into your opponents chest", "A quick legsweep", "Bite and hold your opponent in your jaws", "Violently shake, tearing appart your opponent"};
+		String strCrocRestrainedText="The crocodile is restrained, and cannot attack";
 		
 		int[] intAr1PlayerHealth={6,4,2,1};
 		int[] intAr1CrocHealth={6,8,10,12};
 		
-		Player player = new Player(0,0,1,intAr1PlayerHealth,2, strAr1PlayerAttack, strAr1PlayerAttackText);
-		Croc croc = new Croc(0,0,2,intAr1CrocHealth,2, strAr1CrocAttack, strAr1CrocAttackText);
+		Player player = new Player(0,0,1,intAr1PlayerHealth,2, strAr1PlayerAttack, strAr1PlayerAttackText, strPlayerRestrainedText);
+		Croc croc = new Croc(0,0,2,intAr1CrocHealth,2, strAr1CrocAttack, strAr1CrocAttackText, strCrocRestrainedText);
 		
 		System.out.println(strCommands);
 		
@@ -177,13 +179,23 @@ public class main{
 			first=true;
 			}else if (booAr1Gamestate[1]){
 				int intPlayerAttack;
+				String strCrocValid=null;
+				String strPlayerValid=null;
 				while(player.health>0 && croc.health>0){
 	
 					// crocodile chooses attack
 					int intCrocAttack = croc.chooseAttack(player);
 					
-					// crocodile attacks
-					System.out.println(croc.attack(player, intCrocAttack));
+					// validate attack
+					strCrocValid=croc.validateAttack(intCrocAttack);
+					if (strCrocValid=="valid"){
+					
+						// crocodile attacks
+						System.out.println(croc.attack(player, intCrocAttack));
+						
+					}else if (!(strCrocValid=="valid")){
+						System.out.println(strCrocValid);
+					};
 					
 					if (player.health<=0){
 						break;
@@ -194,8 +206,16 @@ public class main{
 					scanIn.nextLine();
 					intPlayerAttack=System.in.read()-48;
 					
-					// player attacks
-					System.out.println(player.attack(croc, intPlayerAttack));
+					// validate attack
+					strPlayerValid=player.validateAttack(intCrocAttack);
+					if (strPlayerValid=="valid"){
+						
+						// player attacks
+						System.out.println(player.attack(croc, intPlayerAttack));
+						
+					}else if (!(strCrocValid=="valid")){
+						System.out.println(strCrocValid);
+					}
 					
 					try {
 					    Thread.sleep(1500);

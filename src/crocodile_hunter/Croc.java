@@ -21,8 +21,8 @@ public class Croc extends Unit{
 	
 	boolean hunt;
 	
-	public Croc(int startX, int startY, int speed, int[] intAr1Health, int damage, String[] strAr1Attack, String[] strAr1AttackText) {
-		super(startX, startY, speed, intAr1Health, damage, strAr1Attack, strAr1AttackText);
+	public Croc(int startX, int startY, int speed, int[] intAr1Health, int damage, String[] strAr1Attack, String[] strAr1AttackText, String strRestrainedText) {
+		super(startX, startY, speed, intAr1Health, damage, strAr1Attack, strAr1AttackText, strRestrainedText);
 		this.hunt=false;
 	}
 
@@ -103,47 +103,54 @@ public class Croc extends Unit{
 
 	public int chooseAttack(Player defender) {
 		int intReturn=0;
+		System.out.println("crocodile is choosing attack...");
+		try {
+		    Thread.sleep(1000);
+		} catch(InterruptedException ex) {
+		    Thread.currentThread().interrupt();
+		}
 		if (defender.booRestrained){
-			intReturn = 5;
+			System.out.println("true");
+			intReturn = 4;
 		}else if (!defender.booRestrained){
-			intReturn = (int) Math.floor(Math.random() * 4);
-			System.out.println("crocodile is choosing attack...");
-			try {
-			    Thread.sleep(1000);
-			} catch(InterruptedException ex) {
-			    Thread.currentThread().interrupt();
-			}
+			System.out.println("false");
+			intReturn = 3;
+			// generate random number between 0 and 4
+			//intReturn = (int) Math.random() * 5);
 		}
 		return (intReturn);
 	}
 
 	public String attack(Player defender, int intAttack) {
 		String strReturn=null;
-		if (this.booRestrained){
-			strReturn="The crocodile is restrained, and cannot attack";
-		}else if (!this.booRestrained){
 		System.out.println(this.strAr1Attack[intAttack]);
 		strReturn=defender.defend(this, intAttack);
-		}
 		return strReturn;
 	}
 
 	public String defend(Player attacker, int intAttack) {
 		// TODO Auto-generated method stub
 		String strReturn=null;
-		
+		System.out.println(intAttack);
 		int crocDef=(int) Math.floor(Math.random()*4);
 		if (crocDef<=1){
 			if (intAttack==4){
 				this.booRestrained=true;
 				strReturn="You hold the crocodile in the air";
-			}else if (!(intAttack==4)){
+			}else if (intAttack==5){
+				this.booRestrained=false;
+				this.health-=2*attacker.damage;
+				strReturn="The crocodile takes "+2*attacker.damage+" damage!";
+			}else{
 				this.health-=attacker.damage;
 				strReturn="The crocodile takes "+attacker.damage+" damage!";
 			}
 		}else if (crocDef>0){
 			if (this.booRestrained){
 				this.booRestrained=false;
+				strReturn="The crocodile breaks free";
+			}
+			else if (intAttack==4){
 				strReturn="The crocodile breaks free";
 			}else if (!(intAttack==4)){
 				strReturn="The crocodile evades the attack!";
