@@ -175,14 +175,13 @@ public class main{
 					System.out.println("\""+Character.toString((char)intPlayerCommand)+strValidCommands+".");
 				};
 				
-			player.health=1;
 			first=true;
 			}else if (booAr1Gamestate[1]){
 				int intPlayerAttack;
 				String strCrocValid=null;
 				String strPlayerValid=null;
 				while(player.health>0 && croc.health>0){
-	
+					
 					// crocodile chooses attack
 					int intCrocAttack = croc.chooseAttack(player);
 					
@@ -197,7 +196,14 @@ public class main{
 						System.out.println(strCrocValid);
 					};
 					
+					
 					if (player.health<=0){
+						System.out.println("You have taken fatal damage!");
+						try {
+						    Thread.sleep(1500);
+						} catch(InterruptedException ex) {
+						    Thread.currentThread().interrupt();
+						}
 						break;
 					}
 					
@@ -213,8 +219,8 @@ public class main{
 						// player attacks
 						System.out.println(player.attack(croc, intPlayerAttack));
 						
-					}else if (!(strCrocValid=="valid")){
-						System.out.println(strCrocValid);
+					}else if (!(strPlayerValid=="valid")){
+						System.out.println(strPlayerValid);
 					}
 					
 					try {
@@ -226,7 +232,10 @@ public class main{
 					if (croc.health<=0){
 						booAr1Gamestate[1]=false;
 						booAr1Gamestate[0]=true;
-						croc.health = intAr1CrocHealth[main.intDifficulty];
+						if(croc.intRage<=5){
+							croc.intRage++;
+						}
+						croc.health = intAr1CrocHealth[main.intDifficulty]-croc.intRage;
 						croc.reLocate(croc, player, croc);
 						System.out.println("Defeted, The crocodile flees to recover strengh.");
 						break;

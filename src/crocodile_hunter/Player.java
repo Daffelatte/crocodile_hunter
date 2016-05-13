@@ -65,29 +65,29 @@ public class Player extends Unit {
 		}
 		
 		if (intPlayerCommand==intAr1DefCommand[intAttack]){
-			if (this.booRestrained){
-				this.booRestrained=false;
+			if (this.booDisarmed){
+				this.booDisarmed=false;
 				strReturn="You breaks free";
 			}else if (!(intAttack==3)){
 				strReturn="You evaded the attack!";
 			}
 		}else if(!(intPlayerCommand==intAr1DefCommand[intAttack])){
 			if (intAttack==3){
-				this.booRestrained=true;
-				strReturn="The crocodile holds you in it's jaws";
+				this.booDisarmed=true;
+				strReturn="You are disarmed!";
 			}else if (intAttack==4){
-				this.booRestrained=false;
+				this.booDisarmed=false;
 				this.health-=2*attacker.damage;
 				strReturn="You take "+2*attacker.damage+" damage!";
 			}else{
-				System.out.println(intAttack+"!=4");
+				//System.out.println(intAttack+"!=4");
 				this.health-=attacker.damage;
 				strReturn="You take "+attacker.damage+" damage!";
 			}
 		};
 		
 
-		System.out.print(intPlayerCommand+" == "+intAr1DefCommand[intAttack]+"\n");
+		//System.out.print(intPlayerCommand+" == "+intAr1DefCommand[intAttack]+"\n");
 
 		return strReturn;
 	}

@@ -18,7 +18,7 @@ public class Unit {
 	public String[] strAr1Attack;
 	public String[] strAr1AttackText;
 	public String strRestrainedText;
-	public boolean booRestrained = false;
+	public boolean booDisarmed = false;
 	
 	public int[][] positionDelta={
 			{-1,0,1,0},
@@ -213,9 +213,9 @@ public class Unit {
 	};
 	public String validateAttack(int intAttack){
 		String strReturn = null;
-		if (this.booRestrained){
+		if (this.booDisarmed){
 			strReturn=this.strRestrainedText;
-		}else if (!this.booRestrained){
+		}else if (!this.booDisarmed){
 			strReturn="valid";
 		}
 		return strReturn;

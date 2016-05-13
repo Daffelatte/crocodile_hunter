@@ -20,6 +20,7 @@ public class Croc extends Unit{
 	
 	
 	boolean hunt;
+	public int intRage;
 	
 	public Croc(int startX, int startY, int speed, int[] intAr1Health, int damage, String[] strAr1Attack, String[] strAr1AttackText, String strRestrainedText) {
 		super(startX, startY, speed, intAr1Health, damage, strAr1Attack, strAr1AttackText, strRestrainedText);
@@ -109,14 +110,13 @@ public class Croc extends Unit{
 		} catch(InterruptedException ex) {
 		    Thread.currentThread().interrupt();
 		}
-		if (defender.booRestrained){
-			System.out.println("true");
+		if (defender.booDisarmed){
+			//System.out.println("true");
 			intReturn = 4;
-		}else if (!defender.booRestrained){
-			System.out.println("false");
-			intReturn = 3;
-			// generate random number between 0 and 4
-			//intReturn = (int) Math.random() * 5);
+		}else if (!defender.booDisarmed){
+			//System.out.println("false");
+			// generate random number between 0 and 3
+			intReturn = (int) (Math.random() * 4);
 		}
 		return (intReturn);
 	}
@@ -135,19 +135,20 @@ public class Croc extends Unit{
 		int crocDef=(int) Math.floor(Math.random()*4);
 		if (crocDef<=1){
 			if (intAttack==4){
-				this.booRestrained=true;
+				this.booDisarmed=true;
 				strReturn="You hold the crocodile in the air";
 			}else if (intAttack==5){
-				this.booRestrained=false;
+				this.booDisarmed=false;
 				this.health-=2*attacker.damage;
 				strReturn="The crocodile takes "+2*attacker.damage+" damage!";
 			}else{
+				this.booDisarmed=false;
 				this.health-=attacker.damage;
 				strReturn="The crocodile takes "+attacker.damage+" damage!";
 			}
 		}else if (crocDef>0){
-			if (this.booRestrained){
-				this.booRestrained=false;
+			if (this.booDisarmed){
+				this.booDisarmed=false;
 				strReturn="The crocodile breaks free";
 			}
 			else if (intAttack==4){
