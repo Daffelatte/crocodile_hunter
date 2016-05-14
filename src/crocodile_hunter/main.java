@@ -243,10 +243,7 @@ public class main{
 					if (croc.health<=0){
 						booAr1Gamestate[1]=false;
 						booAr1Gamestate[0]=true;
-						if(croc.intRage<=5){
-							croc.intRage++;
-						}
-						croc.health = intAr1CrocHealth[main.intDifficulty]-croc.intRage;
+						croc.health = intAr1CrocHealth[main.intDifficulty]-2;
 						croc.reLocate(croc, player, croc);
 						System.out.println("Defeted, The crocodile flees to recover strengh.");
 						break;

@@ -23,8 +23,20 @@ public class Map{
 			{0,0,0,0,0,0,0,0,0,0},
 			{0,0,0,0,0,0,0,0,0,0},
 			{0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0}
 
+	};
+	static int[][] intAr2EventMap = {
+			{0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0}
 	};
 	static int[] intAr1Height = {4,4,3,3,2,2,1,1,0,0};
 	static String[] strAr1FullASCII = {" ","@","¤","+","=","~","-",",","."," "  ," "," "," "," "," "};
@@ -34,7 +46,25 @@ public class Map{
 	static String[] strAr1ActiveASCII=strAr1SemiASCII;
 	static int intNumOfPeaks=1;
 	public static int[][] intAr2ActiveMap;
-	public Map(){
+	
+	static int[] intAr1EventType = {0,0,1};
+	static int[] intAr1EventColor = {0,1,2,3};
+	static int[] intAr1EventOdd = {0,0,0,1};
+	
+	// buff, level, duration, deBuff, level, duration
+	static int[][] intEventData = {
+			{0,1,10,1,1,10},//red berries
+			{2,1,10,3,1,10},//blue berries
+			{4,1,10,5,1,10},//green berries
+			{6,1,5,7,1,5},//yellow berries
+			
+			{0,2,10,1,2,10},//red frog
+			{2,2,10,3,2,10},//blue frog
+			{4,2,10,5,2,10},//green frog
+			{6,2,5,7,2,5},//yellow frog
+	};
+	
+	Map(){
 	}
 	public static String generateStrMap(Player player, Croc croc, int[][] intActiveMap, String[] strAr1ActiveASCII){
 		String strReturn = "You look at your map.\n\n_|0|1|2|3|4|5|6|7|8|9|\n";
@@ -92,4 +122,16 @@ public class Map{
 		Map.intAr2RandomMap[seedY][seedX]=1;
 		return Map.intAr2RandomMap;
 	};
+	public static int[][] generateEventMap(){
+		for (int y=0;y<10;y++){
+			for (int x=0;x<10;x++){
+				int intRandomEventPlacer = (int) Math.floor((Math.random()*6));
+				if (intRandomEventPlacer==0){
+					int intRandomEvent = (int) Math.floor((Math.random()*8));
+					intAr2EventMap[y][x]=intRandomEvent;
+				}
+			}
+		}
+		return intAr2EventMap;
+	}
 }
