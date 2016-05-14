@@ -18,12 +18,20 @@ public class Croc extends Unit{
 		"The crocodile is nowhere to be seen..."
 	};
 	
+	public int[][] intAr2AttackData={
+			//damage, hasBuff?(0=false, 1=true), target(0=self, 1=enemy), buffType, buffLevel, buffDuration
+			{0,0}, // punch
+			{-1,1,1,7,1,3}, // suffer
+			{-1,1,1,5,6,2}, // blindness
+			{-2,1,0,2,1,3} // protection
+	};
 	
 	boolean hunt;
 	public int intRage;
 	
-	public Croc(int startX, int startY, int speed, int[] intAr1Health, int damage, String[] strAr1Attack, String[] strAr1AttackText, String strRestrainedText) {
-		super(startX, startY, speed, intAr1Health, damage, strAr1Attack, strAr1AttackText, strRestrainedText);
+	
+	public Croc(int startX, int startY, String name, int speed, int[] intAr1Health, int damage, String[] strAr1Attack, String[] strAr1AttackText, String strRestrainedText) {
+		super(startX, startY, name, speed, intAr1Health, damage, strAr1Attack, strAr1AttackText, strRestrainedText);
 		this.hunt=false;
 	}
 
@@ -104,7 +112,7 @@ public class Croc extends Unit{
 
 	public int chooseAttack(Player defender) {
 		int intReturn=0;
-		System.out.println("crocodile is choosing attack...");
+		System.out.println();//"crocodile is choosing attack..."
 		try {
 		    Thread.sleep(1000);
 		} catch(InterruptedException ex) {
@@ -120,7 +128,7 @@ public class Croc extends Unit{
 		}
 		return (intReturn);
 	}
-
+	/*
 	public String attack(Player defender, int intAttack) {
 		String strReturn=null;
 		System.out.println(this.strAr1Attack[intAttack]);
@@ -159,5 +167,5 @@ public class Croc extends Unit{
 		}
 		return strReturn;
 	}
-
+	*/
 }

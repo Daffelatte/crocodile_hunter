@@ -15,9 +15,16 @@ public class Player extends Unit {
 			{"You run north.","You run east","You run south","You run west"}
 	};
 	public boolean exhasted=false;
+	public int[][] intAr2AttackData={
+			//damage, hasBuff?(0=false, 1=true), target(0=self, 1=enemy), buffType, buffLevel, buffDuration
+			{0,0}, // punch
+			{-1,1,1,7,1,3}, // suffer
+			{-1,1,1,5,6,2}, // blindness
+			{-2,1,0,2,1,3} // protection
+	};
 	
-	public Player(int startX, int startY, int speed, int[] intAr1Health, int damage, String[] strAr1Attack, String[] strAr1AttackText, String strRestrainedText) {
-		super(startX, startY, speed, intAr1Health, damage, strAr1Attack, strAr1AttackText, strRestrainedText);
+	public Player(int startX, int startY, String name, int speed, int[] intAr1Health, int damage, String[] strAr1Attack, String[] strAr1AttackText, String strRestrainedText) {
+		super(startX, startY, name, speed, intAr1Health, damage, strAr1Attack, strAr1AttackText, strRestrainedText);
 		// TODO Auto-generated constructor stub
 	}
 	public String getHeight(Player player) {
@@ -41,7 +48,7 @@ public class Player extends Unit {
 		player.changeSpeed(player);
 		return strReturn;
 	}
-	
+	/*
 	public String attack(Croc defender, int intAttack) {
 		String strReturn=null;
 		System.out.println(strAr1AttackText[intAttack-1]);
@@ -91,5 +98,5 @@ public class Player extends Unit {
 
 		return strReturn;
 	}
-
+	*/
 }

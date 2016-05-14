@@ -89,17 +89,19 @@ public class main{
 
 		
 		String[] strAr1PlayerAttack={"punch (1)", "kick (2)", "sweep (3)", "rising sun (4)", "setting sun (5)"};
-		String[] strAr1PlayerAttackText={"You punch the crocodile in the face", "You kick the crocodile in the chest", "You quickly sweep the crocodiles legs", "You grab and lift your opponent into the air", "You slam your opponent into the ground"};
+		String[] strAr1PlayerAttackText={"You punch the crocodile in the face", "You kick the Crocodile in the balls", "You quickly sweep the crocodiles legs", "You bolster your defences", "You slam your opponent into the ground"};
 		String strPlayerRestrainedText="You are restrained, and cannot attack";
 		String[] strAr1CrocAttack={"tail whip (1)", "headbutt (2)", "tail-sweep (3)", "bite (4)", "ravage (5)"};
-		String[] strAr1CrocAttackText={"A spinning tail kick to the head", "Slam your head into your opponents chest", "A quick legsweep", "Bite and hold your opponent in your jaws", "Violently shake, tearing appart your opponent"};
+		String[] strAr1CrocAttackText={"The Crocodile strikes you with its tail", "The Crocodile bites you", "The crocodile sweeps your legs", "The crocodile bolsters it's defences", "Violently shake, tearing appart your opponent"};
 		String strCrocRestrainedText="The crocodile is restrained, and cannot attack";
 		
-		int[] intAr1PlayerHealth={6,4,2,1};
-		int[] intAr1CrocHealth={6,8,10,12};
 		
-		Player player = new Player(0,0,1,intAr1PlayerHealth,2, strAr1PlayerAttack, strAr1PlayerAttackText, strPlayerRestrainedText);
-		Croc croc = new Croc(0,0,2,intAr1CrocHealth,2, strAr1CrocAttack, strAr1CrocAttackText, strCrocRestrainedText);
+		
+		int[] intAr1PlayerHealth={10,9,8,7};
+		int[] intAr1CrocHealth={6,6,6,6};
+		
+		Player player = new Player(0,0,"Player",1,intAr1PlayerHealth,2, strAr1PlayerAttack, strAr1PlayerAttackText, strPlayerRestrainedText);
+		Croc croc = new Croc(0,0,"The Crocodile",2,intAr1CrocHealth,2, strAr1CrocAttack, strAr1CrocAttackText, strCrocRestrainedText);
 		
 		System.out.println(strCommands);
 		
@@ -184,13 +186,13 @@ public class main{
 					
 					// crocodile chooses attack
 					int intCrocAttack = croc.chooseAttack(player);
-					
+					System.out.println("---CROC ATTACK---");
 					// validate attack
 					strCrocValid=croc.validateAttack(intCrocAttack);
 					if (strCrocValid=="valid"){
 					
 						// crocodile attacks
-						System.out.println(croc.attack(player, intCrocAttack));
+						croc.attack(player, intCrocAttack);
 						
 					}else if (!(strCrocValid=="valid")){
 						System.out.println(strCrocValid);
@@ -206,7 +208,7 @@ public class main{
 						}
 						break;
 					}
-					
+					System.out.println("---PLAYER ATTACK---");
 					// Player chooses attack
 					System.out.println("Choose attack: ");
 					scanIn.nextLine();
@@ -217,11 +219,20 @@ public class main{
 					if (strPlayerValid=="valid"){
 						
 						// player attacks
-						System.out.println(player.attack(croc, intPlayerAttack));
+						player.attack(croc, intPlayerAttack);
 						
 					}else if (!(strPlayerValid=="valid")){
 						System.out.println(strPlayerValid);
 					}
+					
+					System.out.println("---BUFFS---");
+					// update buffs
+					croc.updateBuffs();
+					player.updateBuffs();
+					System.out.println("---STATS---");
+					System.out.println("Player has "+player.health+" health");
+					System.out.println("Crocodile has "+croc.health+" health");
+					System.out.println("---END---");
 					
 					try {
 					    Thread.sleep(1500);
