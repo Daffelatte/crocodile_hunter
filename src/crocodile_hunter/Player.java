@@ -48,6 +48,48 @@ public class Player extends Unit {
 		player.changeSpeed(player);
 		return strReturn;
 	}
+	public boolean checkForEvent(int positionY, int positionX){
+		return Map.intAr2EventMap[this.positionY][this.positionX]!=-1;
+	}
+	public void doEvent(int selectedEvent){
+		Scanner scanIn = new Scanner(System.in);
+		int intPlayerAnswer = 0;
+		
+		scanIn.nextLine();
+		
+		System.out.println(Map.strEventData[selectedEvent][0]);
+		while(true){
+			try {
+				intPlayerAnswer = System.in.read()-48;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			// Confirm that answer is valid
+			if (intPlayerAnswer==73){
+				System.out.println(Map.strEventData[selectedEvent][1]);
+				int intRandomNegative = (int) Math.floor((Math.random()*3)+1);
+				if (intRandomNegative != 3){
+					intRandomNegative = 0;
+				}
+				int intBuffType = Map.intEventData[selectedEvent][0 + intRandomNegative];
+				int intBuffLevel = Map.intEventData[selectedEvent][1 + intRandomNegative];
+				int intBuffDuration = Map.intEventData[selectedEvent][2 + intRandomNegative];
+				this.applyBuff(intBuffType, intBuffLevel, intBuffDuration);
+				break;
+			}else if(intPlayerAnswer==62){
+				System.out.println(Map.strEventData[selectedEvent][2]);
+				break;
+			}else{
+				System.out.println("\""+Character.toString((char)intPlayerAnswer)+"\" is an invalid answer.\n"
+						+ "Valid answers are: y, n\n"
+						+ "Choose answer:\n");
+			}
+			// Listens for next input.
+			scanIn.nextLine();
+		}
+		//
+	}
 	/*
 	public String attack(Croc defender, int intAttack) {
 		String strReturn=null;

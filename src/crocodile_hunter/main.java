@@ -107,6 +107,7 @@ public class main{
 		
 		// Generate intMap
 		Map.generateIntMap();
+		Map.generateEventMap();
 		if (alwaysGenerateMap){
 			System.out.println(Map.generateStrMap(player, croc, Map.intAr2ActiveMap, Map.strAr1ActiveASCII));
 		}
@@ -144,12 +145,6 @@ public class main{
 					// execute command
 					strPlayerMessage=player.executeCommand(intPlayerCommand, player, player, croc);
 					
-					// Checks if the player has won
-					if (player.checkForMaximum(player,player.positionY,player.positionX)){
-						win=true;
-						break;
-					};
-					
 					//This is necessary, but I don't know why
 					//scanIn.nextLine();
 					
@@ -157,6 +152,17 @@ public class main{
 					
 					// Print player message
 					System.out.println(strPlayerMessage);
+
+					// Checks if the player has won
+					if (player.checkForMaximum(player,player.positionY,player.positionX)){
+						win=true;
+						break;
+					};
+					
+					//checks for events
+					if (player.checkForEvent(player.positionY,player.positionX)){
+						player.doEvent(Map.intAr2EventMap[player.positionY][player.positionX]);
+					};
 					
 					// Choose crocodile command
 					intCrocCommand=croc.chooseCommand(player, croc);
@@ -243,10 +249,7 @@ public class main{
 					if (croc.health<=0){
 						booAr1Gamestate[1]=false;
 						booAr1Gamestate[0]=true;
-						if(croc.intRage<=5){
-							croc.intRage++;
-						}
-						croc.health = intAr1CrocHealth[main.intDifficulty]-croc.intRage;
+						croc.health = intAr1CrocHealth[main.intDifficulty]-2;
 						croc.reLocate(croc, player, croc);
 						System.out.println("Defeted, The crocodile flees to recover strengh.");
 						break;

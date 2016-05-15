@@ -118,14 +118,7 @@ public class Croc extends Unit{
 		} catch(InterruptedException ex) {
 		    Thread.currentThread().interrupt();
 		}
-		if (defender.booDisarmed){
-			//System.out.println("true");
-			intReturn = 4;
-		}else if (!defender.booDisarmed){
-			//System.out.println("false");
-			// generate random number between 0 and 3
-			intReturn = (int) (Math.random() * 4);
-		}
+		intReturn = (int) (Math.random() * 4);
 		return (intReturn);
 	}
 	/*
