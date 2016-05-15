@@ -27,7 +27,7 @@ public class Map{
 
 	};
 	static int[][] intAr2EventMap = {
-<<<<<<< HEAD
+
 			{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
 			{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
 			{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
@@ -50,18 +50,6 @@ public class Map{
 			{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
 			{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
 			{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}
-=======
-			{0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0}
->>>>>>> origin/master
 	};
 	static int[] intAr1Height = {4,4,3,3,2,2,1,1,0,0};
 	static String[] strAr1FullASCII = {" ","@","¤","+","=","~","-",",","."," "  ," "," "," "," "," "};
@@ -72,13 +60,10 @@ public class Map{
 	static int intNumOfPeaks=1;
 	public static int[][] intAr2ActiveMap;
 	
-<<<<<<< HEAD
-=======
 	static int[] intAr1EventType = {0,0,1};
 	static int[] intAr1EventColor = {0,1,2,3};
 	static int[] intAr1EventOdd = {0,0,0,1};
-	
->>>>>>> origin/master
+
 	// buff, level, duration, deBuff, level, duration
 	static int[][] intEventData = {
 			{0,1,10,1,1,10},//red berries
@@ -91,7 +76,6 @@ public class Map{
 			{4,2,10,5,2,10},//green frog
 			{6,2,5,7,2,5},//yellow frog
 	};
-<<<<<<< HEAD
 	public static String[][] strEventData = {
 			{"You find a bush with red berries, do you eat them? (Y/N)", "You eat the red berries...", "You ignore them."},//red berries
 			{"You find a bush with blue berries, do you eat them? (Y/N)", "You eat the blue berries...", "You ignore them."},//blue berries
@@ -109,9 +93,6 @@ public class Map{
 	public static String[][] strItemData = {
 			//itemName, 
 	};
-=======
-	
->>>>>>> origin/master
 	Map(){
 	}
 	public static String generateStrMap(Player player, Croc croc, int[][] intActiveMap, String[] strAr1ActiveASCII){
@@ -170,11 +151,7 @@ public class Map{
 		Map.intAr2RandomMap[seedY][seedX]=1;
 		return Map.intAr2RandomMap;
 	};
-<<<<<<< HEAD
 	public static void generateEventMap(){
-=======
-	public static int[][] generateEventMap(){
->>>>>>> origin/master
 		for (int y=0;y<10;y++){
 			for (int x=0;x<10;x++){
 				int intRandomEventPlacer = (int) Math.floor((Math.random()*6));
@@ -184,20 +161,21 @@ public class Map{
 				}
 			}
 		}
-<<<<<<< HEAD
 	}
 	public static void generateItemMap(){
 		for (int y=0;y<10;y++){
 			for (int x=0;x<10;x++){
-				int intRandomItemPlacer = (int) Math.floor((Math.random()*20));
-				if (intRandomItemPlacer==0){
-					int intRandomItem = (int) Math.floor((Math.random()*8));
-					intAr2ItemMap[y][x]=intRandomItem;
+				int intRndCommonItemPlacer = (int) Math.floor((Math.random()*16));
+				if (intRndCommonItemPlacer==0){
+					int intRndCommonItem = (int) Math.floor((Math.random()*8));
+					intAr2ItemMap[y][x]=intRndCommonItem;
+				}
+				int intRndRareItemPlacer = (int) Math.floor((Math.random()*48));
+				if (intRndRareItemPlacer==0){
+					int intRndRareItem = (int) Math.floor((Math.random()*4));
+					intAr2ItemMap[y][x]=intRndRareItem;
 				}
 			}
 		}
-=======
-		return intAr2EventMap;
->>>>>>> origin/master
 	}
 }

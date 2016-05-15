@@ -11,14 +11,21 @@ Couch Potato
 
 
 +++-+++ ADVENTURE +++-+++
-ITEMS
+Charms - gives passive bonuses outside of combat
+	charm - speed
+	charm - 
+	charm - 
+
+Hexes - activates on "c", does something
 	
+	
+
+WEAPONS - adds new attack on "w"
+	fist-sized rock - bash
+	The blunderbuss - fire
+	
+
 EVENTS
-bushes
-red - strength/weakness
-green - evasion/blindness
-blue - protection/vulnerability
-yellow - restoration/suffering
 
 +++-+++ COMBAT +++-+++
 
