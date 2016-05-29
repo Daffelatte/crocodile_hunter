@@ -15,26 +15,32 @@ public class Player extends Unit {
 			{"You run north.","You run east","You run south","You run west"}
 	};
 	public boolean exhasted=false;
-	public int[][] intAr2AttackData={
-			//damage, hasBuff?(0=false, 1=true), target(0=self, 1=enemy), buffType, buffLevel, buffDuration
-			{0,0}, // punch
-			{-1,1,1,7,1,3}, // suffer
-			{-1,1,1,5,6,2}, // blindness
-			{-2,1,0,2,1,3} // protection
-	};
-	
-	public Player(int startX, int startY, String name, int speed, int[] intAr1Health, int damage, String[] strAr1Attack, String[] strAr1AttackText, String strRestrainedText) {
-		super(startX, startY, name, speed, intAr1Health, damage, strAr1Attack, strAr1AttackText, strRestrainedText);
-		// TODO Auto-generated constructor stub
+	int runningSpeed;
+	int stamina;
+	int maxStamina;
+	int staminaRestoration;
+	int stealth;
+	int weapon=-1;
+	boolean hasItem=false;
+	int height;
+	public Player(int startY, int startX, String name, int speed, int intHealth, int intMaxHealth, int damage, int[][] intAr2AttackData, String[][] strAr2AttackData, int intRunningSpeed, int intStamina, int intStealth, int intDetection) {
+		super(startY,startX,name,speed,intHealth,intMaxHealth,damage,intAr2AttackData,strAr2AttackData,intRunningSpeed,intDetection);
+		this.stamina=intStamina;
+		this.maxStamina=10;
+		this.staminaRestoration=1;
+		this.stealth=intStealth;
+		this.isRunning=false;
 	}
 	public String getHeight(Player player) {
 		int intHeight = Math.abs(9-Map.intAr2ActiveMap[player.positionY][player.positionX]);
 		String strReturn = ("\nYou are now standing "+intHeight+" meters above sea level.");
+		this.height=intHeight;
 		return strReturn;
 	}
 	public boolean checkForMaximum(Player player, int positionY, int positionX) {
 		return Map.intAr2ActiveMap[player.positionY][player.positionX]==1;
 	}
+	/*
 	public String toggleRun(Player player){
 		String strReturn=null;
 		if (player.speed==1){
@@ -48,6 +54,7 @@ public class Player extends Unit {
 		player.changeSpeed(player);
 		return strReturn;
 	}
+	*/
 	public boolean checkForEvent(int positionY, int positionX){
 		return Map.intAr2EventMap[this.positionY][this.positionX]!=-1;
 	}
@@ -57,7 +64,7 @@ public class Player extends Unit {
 		
 		scanIn.nextLine();
 		
-		System.out.println(Map.strEventData[selectedEvent][0]);
+		System.out.println(Map.strAr2EventData[selectedEvent][0]);
 		while(true){
 			try {
 				intPlayerAnswer = System.in.read()-48;
@@ -67,18 +74,69 @@ public class Player extends Unit {
 			}
 			// Confirm that answer is valid
 			if (intPlayerAnswer==73){
-				System.out.println(Map.strEventData[selectedEvent][1]);
+				System.out.println(Map.strAr2EventData[selectedEvent][1]);
 				int intRandomNegative = (int) Math.floor((Math.random()*3)+1);
 				if (intRandomNegative != 3){
 					intRandomNegative = 0;
 				}
-				int intBuffType = Map.intEventData[selectedEvent][0 + intRandomNegative];
-				int intBuffLevel = Map.intEventData[selectedEvent][1 + intRandomNegative];
-				int intBuffDuration = Map.intEventData[selectedEvent][2 + intRandomNegative];
+				int intBuffType = Map.intAr2EventData[selectedEvent][0 + intRandomNegative];
+				int intBuffLevel = Map.intAr2EventData[selectedEvent][1 + intRandomNegative];
+				int intBuffDuration = Map.intAr2EventData[selectedEvent][2 + intRandomNegative];
 				this.applyBuff(intBuffType, intBuffLevel, intBuffDuration);
+				
+				Map.intAr2EventMap[positionY][positionX]=-1;
+				System.out.println("event located at row:"+positionY+", column:"+positionX+" deleted");
 				break;
 			}else if(intPlayerAnswer==62){
-				System.out.println(Map.strEventData[selectedEvent][2]);
+				System.out.println(Map.strAr2EventData[selectedEvent][2]);
+				break;
+			}else{
+				System.out.println("\""+Character.toString((char)intPlayerAnswer)+"\" is an invalid answer.\n"
+						+ "Valid answers are: y, n\n"
+						+ "Choose answer:\n");
+			}
+			// Listens for next input.
+			scanIn.nextLine();
+		}
+		//
+	}
+	public boolean checkForItem(int positionY, int positionX){
+		return Map.intAr2WeaponMap[this.positionY][this.positionX]!=-1;
+	}
+	public void doWeapon(int selectedWeapon){
+		Scanner scanIn = new Scanner(System.in);
+		int intPlayerAnswer = 0;
+		
+		scanIn.nextLine();
+
+		System.out.println(Map.strAr2WeaponData[selectedWeapon][1]);
+		if (this.hasItem){
+			System.out.println("Doing this will cause you to drop "+Map.strAr2WeaponData[this.weapon][0]);
+		}
+		while(true){
+			try {
+				intPlayerAnswer = System.in.read()-48;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			// Confirm that answer is valid
+			if (intPlayerAnswer==73){
+				if (this.hasItem){
+				System.out.println("You drop "+Map.strAr2WeaponData[this.weapon][0]);
+				}
+				this.weapon=selectedWeapon;
+				this.intAr2AttackData[4]=Map.intAr2WeaponAttackData[selectedWeapon];
+				this.strAr2AttackData[0][4]=Map.strAr2WeaponAttackData[selectedWeapon][0];
+				this.strAr2AttackData[1][4]=Map.strAr2WeaponAttackData[selectedWeapon][1];
+				System.out.println("You pick up "+Map.strAr2WeaponData[selectedWeapon][0]);
+				this.hasItem=true;
+				
+				Map.intAr2WeaponMap[positionY][positionX]=-1;
+				System.out.println("Item located at row:"+positionY+", column:"+positionX+" deleted");
+				break;
+			}else if(intPlayerAnswer==62){
+				System.out.println("You ignore it");
 				break;
 			}else{
 				System.out.println("\""+Character.toString((char)intPlayerAnswer)+"\" is an invalid answer.\n"

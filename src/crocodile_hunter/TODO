@@ -18,11 +18,17 @@ Charms - gives passive bonuses outside of combat
 
 Hexes - activates on "c", does something
 	
-	
 
-WEAPONS - adds new attack on "w"
+WEAPONS - adds new attack on "w" ( takes one slot ) 
 	fist-sized rock - bash
-	The blunderbuss - fire
+	stick
+
+TOOLS - gives passive bonuses outside of combat ( takes one slot ), can be dropped?
+	Walking stick - +1 speed 
+	 - +2 maxHealth
+	 - +1 detection
+	Cloak of leaves - +1 stealth
+	Water satchel - +2 stamina (against exhaustion)
 	
 
 EVENTS

@@ -18,20 +18,12 @@ public class Croc extends Unit{
 		"The crocodile is nowhere to be seen..."
 	};
 	
-	public int[][] intAr2AttackData={
-			//damage, hasBuff?(0=false, 1=true), target(0=self, 1=enemy), buffType, buffLevel, buffDuration
-			{0,0}, // punch
-			{-1,1,1,7,1,3}, // suffer
-			{-1,1,1,5,6,2}, // blindness
-			{-2,1,0,2,1,3} // protection
-	};
-	
 	boolean hunt;
 	public int intRage;
 	
 	
-	public Croc(int startX, int startY, String name, int speed, int[] intAr1Health, int damage, String[] strAr1Attack, String[] strAr1AttackText, String strRestrainedText) {
-		super(startX, startY, name, speed, intAr1Health, damage, strAr1Attack, strAr1AttackText, strRestrainedText);
+	public Croc(int startY, int startX, String name, int speed, int intHealth, int intMaxHealth, int damage, int[][] intAr2AttackData, String[][] strAr2AttackData,int intRunningSpeed, int intDetection) {
+		super(startY,startX,name,speed,intHealth,intMaxHealth,damage,intAr2AttackData,strAr2AttackData,intRunningSpeed,intDetection);
 		this.hunt=false;
 	}
 
@@ -71,7 +63,7 @@ public class Croc extends Unit{
 		} else if (!hunt){
 			croc.speed=2;
 		}
-		croc.changeSpeed(croc);
+		croc.toggleRun();
 		strReturn=strAr2Distance[distance];
 		return strReturn;
 	};

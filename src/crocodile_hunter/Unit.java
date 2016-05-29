@@ -11,10 +11,13 @@ public class Unit {
 	public int positionY = 9;
 	public int deltaX = 0;
 	public int deltaY = 0;
+	public boolean isActiveUnit;
 	
 	public String name;
 	public int speed;
+	public int runningSpeed;
 	public int health;
+	public int maxHealth;
 	public int damage;
 
 	public int strength = 0;
@@ -34,21 +37,22 @@ public class Unit {
 	public int blindnessDuration = 0;
 	public int restorationDuration = 0;
 	public int sufferingDuration = 0;
+
+	public int[][] intAr2AttackData;
+	public String[][] strAr2AttackData;
+	
+	boolean isRunning;
 	
 	public int[] intAr1BuffLevel={strength, weakness, protection, vulnerability, evasion, blindness, restoration, suffering};
-	
 	public int[] intAr1BuffDuration={strengthDuration, weaknessDuration, protectionDuration, vulnerabilityDuration, evasionDuration, blindnessDuration, restorationDuration, sufferingDuration};
-	
-	public String[] strAr1Attack;
-	public String[] strAr1AttackText;
-	public String strRestrainedText;
-	public boolean booDisarmed = false;
 	
 	public int[][] positionDelta={
 			{-1,0,1,0},
 			{0,1,0,-1},
 	};
-	public boolean[][] booAr2unitMap = {
+	static boolean[][] booAr2unitMap = new boolean[Map.intMapSize][Map.intMapSize];
+	
+	/*public boolean[][] booAr2unitMap = {
 			{false,false,false,false,false,false,false,false,false,false},
 			{false,false,false,false,false,false,false,false,false,false},
 			{false,false,false,false,false,false,false,false,false,false},
@@ -59,7 +63,7 @@ public class Unit {
 			{false,false,false,false,false,false,false,false,false,false},
 			{false,false,false,false,false,false,false,false,false,false},
 			{false,false,false,false,false,false,false,false,false,false},
-	};
+	};*/
 	
 	public String[][] strAr2Move={
 			{"You walk north.","You walk east","You walk south","You walk west"},
@@ -69,24 +73,18 @@ public class Unit {
 			"You stand still, as you cannot go further west."}
 	};
 	
-	public int[][] intAr2AttackData={
-			//damage, hasBuff?(0=false, 1=true), target(0=self, 1=enemy), buffType, buffLevel, buffDuration
-			{0,0}, // punch
-			{-1,1,1,7,1,3}, // suffer
-			{-1,1,1,5,3,2}, // blindness
-			{-2,1,0,2,1,3} // protection
-	};
-	
-	public Unit(int startY, int startX, String name, int speed, int[] intAr1Health, int damage, String[] strAr1Attack, String[] strAr1AttackText, String strRestrainedText){
+	public Unit(int startY, int startX, String name, int speed, int intHealth, int intMaxHealth, int damage, int[][] intAr2AttackData, String[][] strAr2AttackData, int intRunningSpeed, int intDetection){
 		
 		System.out.println(main.intDifficulty);
-		this.health = intAr1Health[main.intDifficulty];
+		this.health = intHealth;
+		this.maxHealth = intMaxHealth;
 		this.speed = speed;
+		this.runningSpeed = intRunningSpeed;
 		this.damage = damage;
-		this.strAr1Attack = strAr1Attack;
-		this.strAr1AttackText = strAr1AttackText;
-		this.strRestrainedText = strRestrainedText;
+		this.intAr2AttackData = intAr2AttackData;
+		this.strAr2AttackData = strAr2AttackData;
 		this.name = name;
+		this.isActiveUnit=true;
 		
 		positionX = startX;
 		positionY = startY;
@@ -96,6 +94,13 @@ public class Unit {
 		positionDelta[1][1]=speed;
 		positionDelta[0][2]=speed;
 		positionDelta[1][3]=-speed;
+		
+		for (int y=0;y<Map.intMapSize;y++){
+			for (int x=0;x<Map.intMapSize;x++){
+				booAr2unitMap[y][x]=false;
+			}
+		}
+		
 		booAr2unitMap[positionY][positionX]=true;
 	}
 	
@@ -106,9 +111,11 @@ public class Unit {
 				if (i<4){
 					deltaY=activeUnit.positionDelta[0][i];
 					deltaX=activeUnit.positionDelta[1][i];
+					this.isActiveUnit=false;
 					strReturn=activeUnit.walk(deltaY,deltaX,i,activeUnit,player,croc);
 				}else if (i==4){
 					strReturn=Map.generateStrMap(player, croc, Map.intAr2ActiveMap, Map.strAr1ActiveASCII);
+					this.isActiveUnit=false;
 				}else if (i==5){
 					strReturn=main.strCommands;
 				}else if(i==6){
@@ -117,29 +124,28 @@ public class Unit {
 				}else if (i==7){
 					strReturn=croc.hunt(player, croc);
 				}else if (i==8){
-					strReturn=player.toggleRun(player);
+					strReturn=player.toggleRun();
 				};
 				//strReturn=main.strCommandList[i];
 				break;
 			}
 		}
-		
 		return strReturn;
 	}
 	
 	String walk(int deltaY, int deltaX, int i, Unit activeUnit, Player player, Croc croc){
 		String strReturn = null;
-		if (activeUnit.positionY+deltaY<10 && activeUnit.positionY+deltaY>-1 && activeUnit.positionX+deltaX<10 && activeUnit.positionX+deltaX>-1){
+		if (activeUnit.positionY+deltaY<Map.intMapSize && activeUnit.positionY+deltaY>-1 && activeUnit.positionX+deltaX<Map.intMapSize && activeUnit.positionX+deltaX>-1){
 			booAr2unitMap[activeUnit.positionY][activeUnit.positionX]=false;
 			activeUnit.positionY+=deltaY;
 			activeUnit.positionX+=deltaX;
 			booAr2unitMap[activeUnit.positionY][activeUnit.positionX]=true;
 			if (activeUnit instanceof Player) {
-				if (player.speed==1){
-					strReturn=player.strAr2Move[0][i];
-				}else if (player.speed==4){
+				if (player.isRunning){
+					player.stamina-=2;
 					strReturn=player.strAr2Move[2][i];
-					player.exhasted=true;
+				}else{
+					strReturn=player.strAr2Move[0][i];
 				}
 			}else if (activeUnit instanceof Croc){
 				strReturn=croc.strAr2Move[0][i];
@@ -153,14 +159,23 @@ public class Unit {
 		};
 		return (strReturn);
 	};
-	
-	public void changeSpeed(Unit activeUnit){
-		activeUnit.positionDelta[0][0]=-activeUnit.speed;
-		activeUnit.positionDelta[1][1]=activeUnit.speed;
-		activeUnit.positionDelta[0][2]=activeUnit.speed;
-		activeUnit.positionDelta[1][3]=-activeUnit.speed;
+	public String toggleRun(){
+		String strReturn=null;
+		int newSpeed;
+		this.isRunning=!this.isRunning;
+		if (this.isRunning){
+			newSpeed=this.runningSpeed;
+			strReturn="You start running";
+		}else{
+			newSpeed=this.speed;
+			strReturn="You stop running";
+		}
+		this.positionDelta[0][0]=-newSpeed;
+		this.positionDelta[1][1]=newSpeed;
+		this.positionDelta[0][2]=newSpeed;
+		this.positionDelta[1][3]=-newSpeed;
+		return strReturn;
 	}
-
 	public static boolean isCommandValid(int intPlayerCommand) {
 		boolean booReturn=false;
 		for (int i=0;main.intAr1Command.length>i;i++){
@@ -191,7 +206,7 @@ public class Unit {
 			
 			// independent
 			Map.intAr2ActiveMap=Map.intAr2RandomMap;
-			Map.intNumOfPeaks=3;
+			Map.intNumOfPeaks=(int) Math.floor((Map.intMapSize*Map.intMapSize)/33);
 			
 		
 	};
@@ -243,18 +258,15 @@ public class Unit {
 		booAr2unitMap[activeUnit.positionY][activeUnit.positionX]=true;
 		//System.out.println(Arrays.deepToString(intValidLocations));
 	};
-	public String validateAttack(int intAttack){
-		String strReturn = null;
-		if (this.booDisarmed){
-			strReturn=this.strRestrainedText;
-		}else if (!this.booDisarmed){
-			strReturn="valid";
-		}
-		return strReturn;
+	public Boolean validateAttack(int intAttack){
+		boolean booReturn;
+		booReturn=true;
+		return booReturn;
 	};
 	public void attack(Unit defender, int intAttack) {
-		System.out.println(this.strAr1AttackText[intAttack]);
+		System.out.println(this.strAr2AttackData[1][intAttack]);
 		if(this.isAttackBuffed(intAttack) && this.isAttackSelfBuff(intAttack)){
+			System.out.println("self buff");
 			this.applyBuff(this.intAr2AttackData[intAttack][3], this.intAr2AttackData[intAttack][4], this.intAr2AttackData[intAttack][5]);
 		}
 		int intHit=(int) Math.floor(Math.random()*5);
@@ -272,7 +284,10 @@ public class Unit {
 		int intHit=(int) Math.floor(Math.random()*5);
 		if (intHit>=this.evasion){
 			//apply buffs
+			System.out.println("buff?="+this.isAttackBuffed(intAttack));
+			System.out.println("!selfbuff?=");
 			if(this.isAttackBuffed(intAttack) && !(this.isAttackSelfBuff(intAttack))){
+				System.out.println(!(this.isAttackSelfBuff(intAttack)));
 				this.applyBuff(this.intAr2AttackData[intAttack][3], this.intAr2AttackData[intAttack][4], this.intAr2AttackData[intAttack][5]);
 			}
 			//deal damage
@@ -290,6 +305,13 @@ public class Unit {
 		return;
 	}
 	public boolean isAttackBuffed(int intAttack){
+		/*
+		System.out.println("hello");
+		System.out.println(this.intAr2AttackData[4][0]);
+		System.out.println(this.intAr2AttackData[4][1]);
+		System.out.println("intAttack="+intAttack);
+		System.out.println(1==this.intAr2AttackData[intAttack][1]);
+		*/
 		return (1==this.intAr2AttackData[intAttack][1]);
 	}
 	public boolean isAttackSelfBuff(int intAttack){
@@ -339,6 +361,12 @@ public class Unit {
 				}
 			}
 			
+		}
+	}
+	public void checkForIllegalHealth(){
+		if (this.health>this.maxHealth){
+			this.health=this.maxHealth;
+			System.out.println(this.name+" health can't exeed "+this.maxHealth);
 		}
 	}
 }
