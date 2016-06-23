@@ -16,7 +16,7 @@ public class Map{
 			{1,1,0,0,0,1,2,3,4,6},
 			{0,0,1,1,1,2,3,3,5,6}
 	};
-	static int intMapSize=16;
+	static int intMapSize=12;
 	
 	static int[][] intAr2RandomMap = new int[intMapSize][intMapSize];
 	/*static int[][] intAr2RandomMap = {
@@ -62,7 +62,7 @@ public class Map{
 	static int[] intAr1Height = {4,4,3,3,2,2,1,1,0,0};
 	static String[] strAr1FullASCII = {" ","@","¤","+","=","~","-",",","."," "," "," "," "," "," "};
 	//static String[] strSemiASCIIList = {" ","~","~","~","~","-","-","-","-","-"};
-	static String[] strAr1SemiASCII = {" ","-","-","-","-"," "," "," "," "," "," "," "," "," "," "};
+	static String[] strAr1SemiASCII = {" ","@","-","-","."," "," "," "," "," "," "," "," "," "," "};
 	//static String[] strASCIIList = {"0","1","2","3","4","5","6","7","8","9","A","B"};
 	static String[] strAr1MapCoordinateChars = {
 				"0","1","2","3","4","5","6","7","8","9",
@@ -70,7 +70,7 @@ public class Map{
 				"K","L","M","N","O","P","Q","R","S","T",
 				"U","V","W","X","Y","Z"
 		};
-	static String[] strAr1ActiveASCII=strAr1FullASCII;
+	static String[] strAr1ActiveASCII=strAr1SemiASCII;
 	static int intNumOfPeaks=1;
 	public static int[][] intAr2ActiveMap=intAr2RandomMap;
 	
@@ -158,6 +158,14 @@ public class Map{
 		for (int i=0;i<intMapSize;i++){ //+ "_|0|1|2|3|4|5|6|7|8|9|"
 			strReturn+=strAr1MapCoordinateChars[i]+"|";
 		}
+		strReturn+="  _|";
+		for (int i=0;i<intMapSize;i++){ //+ "_|0|1|2|3|4|5|6|7|8|9|"
+			strReturn+=strAr1MapCoordinateChars[i]+"|";
+		}
+		strReturn+="  _|";
+		for (int i=0;i<intMapSize;i++){ //+ "_|0|1|2|3|4|5|6|7|8|9|"
+			strReturn+=strAr1MapCoordinateChars[i]+"|";
+		}
 				
 		strReturn+="\n";
 		for(int i=0;i<intMapSize;i++) {
@@ -178,6 +186,24 @@ public class Map{
             		strReturn+=" |";
             	}
             	*/
+            }
+            strReturn+="  ";
+            strReturn+=strAr1MapCoordinateChars[i]+"|";
+            for(int j=0;j<intMapSize;j++) {
+            	if (intAr2EventMap[i][j]!=-1){
+            		strReturn+=intAr2EventMap[i][j]+"|";
+            	}else{
+            		strReturn+="_|";
+            	}
+            }
+            strReturn+="  ";
+            strReturn+=strAr1MapCoordinateChars[i]+"|";
+            for(int j=0;j<intMapSize;j++) {
+            	if (intAr2WeaponMap[i][j]!=-1){
+            		strReturn+=intAr2WeaponMap[i][j]+"|";
+            	}else{
+            		strReturn+="_|";
+            	}
             }
             strReturn+="\n";
         }
@@ -227,10 +253,14 @@ public class Map{
 		}
 		for (int y=0;y<intMapSize;y++){
 			for (int x=0;x<intMapSize;x++){
-				int intRandomEventPlacer = (int) Math.floor((Math.random()*6));
+				int intRandomEventPlacer = (int) Math.floor((Math.random()*8));				// Randomly decides whether this tile is an event or not
 				if (intRandomEventPlacer==0){
-					int intRandomEvent = (int) Math.floor((Math.random()*8));
-					intAr2EventMap[y][x]=intRandomEvent;
+					int intRandomEventTypeSelector = (int) Math.floor((Math.random()*3));   // Randomly decides whether this event is a bush or frog
+					int intRandomEventSelector = (int) Math.floor((Math.random()*4));		// Randomly decides what color it is
+					if (intRandomEventTypeSelector==0){
+						intRandomEventSelector += 4;
+					}
+					intAr2EventMap[y][x]=intRandomEventSelector;
 				}
 			}
 		}
@@ -245,8 +275,8 @@ public class Map{
 			for (int x=0;x<intMapSize;x++){
 				int intRndWeaponPlacer = (int) Math.floor((Math.random()*16));
 				if (intRndWeaponPlacer==0){
-					int intRndWeapon = (int) Math.floor((Math.random()*11));
-					intAr2WeaponMap[y][x]=intRndWeapon;
+					int intRndWeaponSelector = (int) Math.floor((Math.random()*11));
+					intAr2WeaponMap[y][x]=intRndWeaponSelector;
 				}
 			}
 		}

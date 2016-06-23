@@ -50,7 +50,7 @@ public class Unit {
 			{-1,0,1,0},
 			{0,1,0,-1},
 	};
-	static boolean[][] booAr2unitMap = new boolean[Map.intMapSize][Map.intMapSize];
+	public boolean[][] booAr2unitMap = new boolean[Map.intMapSize][Map.intMapSize];
 	
 	/*public boolean[][] booAr2unitMap = {
 			{false,false,false,false,false,false,false,false,false,false},
@@ -97,7 +97,7 @@ public class Unit {
 		
 		for (int y=0;y<Map.intMapSize;y++){
 			for (int x=0;x<Map.intMapSize;x++){
-				booAr2unitMap[y][x]=false;
+				this.booAr2unitMap[y][x]=false;
 			}
 		}
 		
